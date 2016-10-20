@@ -1,0 +1,52 @@
+version: '1'
+services:
+  databaseandcaching:
+    image: portal-local-db-redis
+    ports:
+      - "13306:3306"
+      - "16379:6379"
+  messagebus:
+    image: portal-local-rabbitmq
+    ports:
+      - "15672:5672"
+  web:
+    image: portal-local-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - fullpathportalcdn:/usr/share/nginx/html/portal
+#      - fullpathaccountcdn:/usr/share/nginx/html/account
+      - fullpathnasstatics:/usr/share/nginx/html/nas
+      - fullpathweblogs:/var/log/nginx/netop
+  portalapi:
+    image: git.netop.com:4545/portal/portal-docker-images:developer_latest
+    ports:
+      - "8083:8083"
+    volumes:
+      - fullpathtoportalproject:/netop-worker/files
+      - fullpathtoportalconfig:/netop-worker/config
+      - fullpathtoportallogs:/netop-worker/logs
+#  authenticate:
+#    image: git.netop.com:4545/portal/portal-docker-images:developer_latest
+#    ports: 
+#      - "8084:8084"
+#    volumes:
+#      - fullpathtoauthenticateproject:/netop-worker/files
+#      - fullpathtoauthenticateconfig:/netop-worker/config
+#      - fullpathtoauthenticatelogs:/netop-worker/logs
+  permissions:
+    image: git.netop.com:4545/portal/portal-docker-images:developer_latest
+    volumes:
+      - fullpathtopermissionsproject:/netop-worker/files
+      - fullpathtopermissionsconfig:/netop-worker/config
+      - fullpathtopermissionslogs:/netop-worker/logs  
+  nas:
+    image: git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12_PB3.0.2
+    ports:
+      - "8085:8085"
+    volumes:
+      - fullpathtonasproject:/netop-worker/files
+      - fullpathtonasconfig:/netop-worker/config
+      - fullpathtonaslogs:/netop-worker/logs
+    

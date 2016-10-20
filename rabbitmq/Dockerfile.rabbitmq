@@ -1,0 +1,15 @@
+FROM rabbitmq:latest
+MAINTAINER Octavian Ionescu<ocio@netop.com>
+
+RUN apt-get update \
+  && apt-get install -y wget python \
+  && rm -rf /var/lib/apt/lists/* 
+
+COPY doQueues.sh /root/
+COPY test.sh /root/
+COPY rabbitmqadmin /root/
+
+RUN chmod +x /root/test.sh \
+  && chmod +x /root/rabbitmqadmin \
+  && chmod +x /root/doQueues.sh \
+  && rabbitmq-plugins enable --offline rabbitmq_management

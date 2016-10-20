@@ -1,0 +1,425 @@
+CREATE DATABASE  IF NOT EXISTS `portal` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `portal`;
+-- MySQL dump 10.13  Distrib 5.7.9, for linux-glibc2.5 (x86_64)
+--
+-- Host: localhost    Database: portal
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.0.23-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `account`
+--
+
+DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `account` (
+  `id` varchar(40) NOT NULL,
+  `company` varchar(128) NOT NULL,
+  `seats` int(11) NOT NULL,
+  `from` datetime NOT NULL,
+  `to` datetime DEFAULT NULL,
+  `inactive` datetime DEFAULT NULL,
+  `salesforce_id` varchar(128) NOT NULL,
+  `trial` int(11) DEFAULT '0',
+  `everyone` varchar(40) DEFAULT NULL,
+  `everything` varchar(40) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `createdby` varchar(40) DEFAULT NULL,
+  `modifiedby` varchar(40) DEFAULT NULL,
+  `deletedby` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `account`
+--
+
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES ('063947fdeb68fb5843238f24adbe94ae48200dc7','Netop Superadmins',100,'2016-03-09 20:52:16',NULL,NULL,'saleforce id',NULL,'b9d486855f6000006412b6481453893643741713','30041edb80e2651fb50e3b051453893643741700','2016-03-09 20:52:16','2016-03-09 20:52:16',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `accountUsers`
+--
+
+DROP TABLE IF EXISTS `accountUsers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `accountUsers` (
+  `userId` varchar(40) NOT NULL DEFAULT '',
+  `accountId` varchar(40) NOT NULL DEFAULT '',
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`userId`,`accountId`),
+  UNIQUE KEY `oneAccountPerUser` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `accountUsers`
+--
+
+LOCK TABLES `accountUsers` WRITE;
+/*!40000 ALTER TABLE `accountUsers` DISABLE KEYS */;
+INSERT INTO `accountUsers` VALUES ('063947fdeb68fb5843238f24adbe94ae48200db6','063947fdeb68fb5843238f24adbe94ae48200dc7',0,'2016-03-09 20:52:16','2016-03-09 20:52:16',NULL);
+/*!40000 ALTER TABLE `accountUsers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `device`
+--
+
+DROP TABLE IF EXISTS `device`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device` (
+  `id` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `microtime` float DEFAULT '0',
+  `status` tinyint(1) NOT NULL,
+  `host_name` varchar(128) CHARACTER SET utf8 NOT NULL,
+  `host_alias` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
+  `state` text CHARACTER SET utf8,
+  `deletedby` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  `modifiedby` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  `createdby` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `accountId` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  `user` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
+  `groupId` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_device_groupid` (`groupId`),
+  KEY `idx_device_accountid` (`accountId`),
+  KEY `idx_device_acc_stat_deleted_name` (`accountId`,`status`,`deleted`,`host_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `device`
+--
+
+LOCK TABLES `device` WRITE;
+/*!40000 ALTER TABLE `device` DISABLE KEYS */;
+/*!40000 ALTER TABLE `device` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `group`
+--
+
+DROP TABLE IF EXISTS `group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `group` (
+  `id` varchar(40) NOT NULL,
+  `accountId` varchar(40) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `inactive` datetime DEFAULT NULL,
+  `parentId` varchar(40) DEFAULT NULL,
+  `modifiedby` varchar(40) DEFAULT NULL,
+  `createdby` varchar(40) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` varchar(45) DEFAULT NULL,
+  `group_type` tinyint(1) DEFAULT '1',
+  `read_only` tinyint(1) DEFAULT '0',
+  `special_group` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_group_name_types` (`name`,`accountId`,`group_type`),
+  KEY `idx_group_parentid` (`parentId`),
+  KEY `idx_group_accountid_grouptype` (`accountId`,`group_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `group`
+--
+
+LOCK TABLES `group` WRITE;
+/*!40000 ALTER TABLE `group` DISABLE KEYS */;
+INSERT INTO `group` VALUES ('30041edb80e2651fb50e3b051453893643741700','063947fdeb68fb5843238f24adbe94ae48200dc7','everything',NULL,NULL,NULL,NULL,NULL,'2016-03-09 20:52:18','2016-03-09 20:52:18',NULL,2,1,1),('b9d486855f6000006412b6481453893643741713','063947fdeb68fb5843238f24adbe94ae48200dc7','everyone',NULL,NULL,NULL,NULL,NULL,'2016-03-09 20:52:18','2016-03-09 20:52:18',NULL,1,1,1);
+/*!40000 ALTER TABLE `group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `passwordCode`
+--
+
+DROP TABLE IF EXISTS `passwordCode`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `passwordCode` (
+  `id` varchar(40) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `userId` varchar(40) DEFAULT NULL,
+  `expire_date` datetime NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `passwordCode`
+--
+
+LOCK TABLES `passwordCode` WRITE;
+/*!40000 ALTER TABLE `passwordCode` DISABLE KEYS */;
+/*!40000 ALTER TABLE `passwordCode` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `permission`
+--
+
+DROP TABLE IF EXISTS `permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` int(11) DEFAULT NULL COMMENT 'type:  1 - portal',
+  `area` int(11) DEFAULT NULL COMMENT '1 - users\n2 - devices\n3 - groups',
+  `name` int(11) DEFAULT NULL COMMENT '1 - list\n2 - view\n3 - add\n4 - edit\n5 - delete\n6 - move to group\n7 - BBSC',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_permission_id` (`id`),
+  UNIQUE KEY `uniq_permission_code` (`type`,`area`,`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permission`
+--
+
+LOCK TABLES `permission` WRITE;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+INSERT INTO `permission` VALUES (1,1,1,1),(2,1,1,2),(3,1,1,3),(4,1,1,4),(5,1,1,5),(6,1,1,6),(7,1,1,7),(8,1,1,8),(9,1,1,9),(10,1,2,1),(11,1,2,2),(12,1,2,4),(13,1,2,7),(36,1,2,8),(14,1,3,1),(15,1,3,2),(16,1,3,3),(17,1,3,4),(18,1,3,5),(19,1,4,1),(20,1,4,2),(21,1,5,1),(22,1,5,2),(23,1,5,3),(24,1,5,4),(25,1,5,5),(27,1,5,7),(28,1,5,8),(29,1,6,1),(30,1,6,2),(31,1,6,3),(82,1,6,4),(32,1,6,5),(35,2,1,1),(38,2,1,2),(39,2,1,3),(73,2,1,4),(74,2,1,5),(75,2,1,6),(76,2,1,7),(77,2,1,8),(78,2,1,9),(79,2,1,10),(80,2,1,11),(81,2,1,12),(64,2,1,13),(65,2,1,14),(67,2,1,16),(68,2,1,17),(69,2,1,18),(70,2,1,19),(71,2,1,20),(83,2,1,21),(72,2,2,1),(84,2,3,1),(33,3,1,1),(34,3,1,2);
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` text,
+  `status` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  `accountId` varchar(40) DEFAULT NULL,
+  `modifiedby` varchar(40) DEFAULT NULL,
+  `createdby` varchar(40) DEFAULT NULL,
+  `deletedby` varchar(40) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `portalDefault` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_role_name` (`name`),
+  KEY `idx_role_role_accountId` (`accountId`),
+  KEY `idx_role_accountid_deleted` (`accountId`,`deleted`)
+) ENGINE=InnoDB AUTO_INCREMENT=410 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (82,'Administrator','The Administrator role provides full access to the remote device when using the Browser Based Support Console or an installed Guest.',1,2,NULL,NULL,NULL,NULL,'2016-02-10 09:37:47',NULL,NULL,1),(403,'Add Devices','This role provides communication with the Netop Portal, but does not include any permissions or rights. Netop recommends the creation of dedicated user(s) assigned to the Add Devices role so that individuals do not enter their own username and password when enrolling devices in the Portal. For example, an Administrator may create a user named \'portal_access@mycompany.com\' and assign them the \'Add Devices\' role. The portal_access@mycompany.com credentials would be used in the configuration of the Guest & Host Communication Profile.',1,3,NULL,NULL,NULL,NULL,'2016-02-10 09:37:47',NULL,NULL,1),(405,'View Only','View Only allows the Guest user to view the screen of the Host from the installed Guest software or from the Browser Based Support Console. Permissions are restricted to viewing the screen only, no additional capabilities or permissions are provided.',1,2,NULL,NULL,NULL,NULL,'2016-02-10 09:37:47',NULL,NULL,1),(406,'Web Support','Web Support provides full access to the Browser Based Support Console. Access from an installed Guest is not allowed.',1,2,NULL,NULL,NULL,NULL,'2016-02-10 09:37:47',NULL,NULL,1),(407,'Technician','The Technician role provides keyboard, video and mouse control through the Browser Based Support Console or an installed Guest. In addition, those with an installed Guest have Get Inventory and Chat permissions enabled.',1,2,NULL,'c85effd250b7b52605dadb0c15f970c7d02f7a9d',NULL,NULL,'2016-02-10 09:37:47','2016-02-11 10:44:11',NULL,1),(408,'Engineer','The Engineer role provides keyboard, video and mouse control through the Browser Based Support Console or an installed Guest. In addition, those with an installed Guest have Get Inventory, Chat and File Transfer permissions enabled.',1,2,NULL,'c85effd250b7b52605dadb0c15f970c7d02f7a9d',NULL,NULL,'2016-02-10 09:37:47','2016-02-11 10:39:36',NULL,1),(409,'Manager','The Manager role provides keyboard, video and mouse control through the Browser Based Support Console or an installed Guest. In addition, those with an installed Guest have Get Inventory, Chat, File Transfer and Remote Management permissions enabled.',1,2,NULL,'c85effd250b7b52605dadb0c15f970c7d02f7a9d',NULL,NULL,'2016-02-10 09:37:47','2016-02-11 10:43:24',NULL,1);
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roleAssignment`
+--
+
+DROP TABLE IF EXISTS `roleAssignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roleAssignment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `supporters` varchar(40) NOT NULL,
+  `role` int(11) NOT NULL,
+  `devices` varchar(40) DEFAULT NULL,
+  `inactive` int(1) DEFAULT '0',
+  `accountId` varchar(40) NOT NULL,
+  `modifiedby` varchar(40) DEFAULT NULL,
+  `createdby` varchar(40) DEFAULT NULL,
+  `deletedby` varchar(40) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `roleAssignment_idx_accountId` (`accountId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roleAssignment`
+--
+
+LOCK TABLES `roleAssignment` WRITE;
+/*!40000 ALTER TABLE `roleAssignment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roleAssignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rolePermissions`
+--
+
+DROP TABLE IF EXISTS `rolePermissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rolePermissions` (
+  `roleId` int(11) NOT NULL DEFAULT '0',
+  `permissionId` varchar(10) NOT NULL DEFAULT '',
+  `allow` tinyint(1) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`roleId`,`permissionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rolePermissions`
+--
+
+LOCK TABLES `rolePermissions` WRITE;
+/*!40000 ALTER TABLE `rolePermissions` DISABLE KEYS */;
+INSERT INTO `rolePermissions` VALUES (82,'35',1,'2016-02-10 09:37:47',NULL),(82,'38',1,'2016-02-10 09:37:47',NULL),(82,'39',1,'2016-02-10 09:37:47',NULL),(82,'64',1,'2016-02-10 09:37:47',NULL),(82,'65',1,'2016-02-10 09:37:47',NULL),(82,'67',1,'2016-02-10 09:37:47',NULL),(82,'68',1,'2016-02-10 09:37:47',NULL),(82,'69',1,'2016-02-10 09:37:47',NULL),(82,'70',1,'2016-02-10 09:37:47',NULL),(82,'71',1,'2016-02-10 09:37:47',NULL),(82,'72',1,'2016-02-10 09:37:47',NULL),(82,'73',1,'2016-02-10 09:37:47',NULL),(82,'74',1,'2016-02-10 09:37:47',NULL),(82,'75',1,'2016-02-10 09:37:47',NULL),(82,'76',1,'2016-02-10 09:37:47',NULL),(82,'77',1,'2016-02-10 09:37:47',NULL),(82,'78',1,'2016-02-10 09:37:47',NULL),(82,'79',1,'2016-02-10 09:37:47',NULL),(82,'80',1,'2016-02-10 09:37:47',NULL),(82,'81',1,'2016-02-10 09:37:47',NULL),(82,'83',1,'2016-02-10 09:37:47',NULL),(82,'84',1,'2016-02-10 09:37:47',NULL),(403,'33',1,'2016-02-10 09:37:47',NULL),(405,'35',1,'2016-02-10 09:37:47',NULL),(405,'72',1,'2016-02-10 09:37:47',NULL),(406,'72',1,'2016-02-10 09:37:47',NULL),(407,'35',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(407,'36',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(407,'38',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(407,'67',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(407,'72',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(407,'76',1,'2016-02-11 10:44:11','2016-02-11 10:44:11'),(408,'35',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'36',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'38',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'67',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'72',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'76',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'79',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(408,'80',1,'2016-02-11 10:39:36','2016-02-11 10:39:36'),(409,'35',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'36',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'38',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'65',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'67',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'72',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'76',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'79',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(409,'80',1,'2016-02-11 10:43:24','2016-02-11 10:43:24'),(10000,'35',1,'2016-02-19 14:59:48','2016-02-19 14:59:48'),(10000,'72',1,'2016-02-19 14:59:48','2016-02-19 14:59:48');
+/*!40000 ALTER TABLE `rolePermissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` varchar(40) NOT NULL,
+  `firstname` varchar(128) DEFAULT NULL,
+  `lastname` varchar(128) DEFAULT NULL,
+  `username` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `admin` tinyint(4) DEFAULT NULL,
+  `inactive` datetime DEFAULT NULL,
+  `deletedby` varchar(40) DEFAULT NULL,
+  `modifiedby` varchar(40) DEFAULT NULL,
+  `createdby` varchar(40) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `groupId` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_user_username` (`username`),
+  UNIQUE KEY `uniq_user_email` (`email`),
+  KEY `idx_user_deletedby` (`deletedby`),
+  KEY `idx_user_modifiedby` (`modifiedby`),
+  KEY `idx_user_createdby` (`createdby`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('063947fdeb68fb5843238f24adbe94ae48200db6','Netop','Admin','admin@netop.com','admin@netop.com',1,NULL,NULL,NULL,NULL,'2016-03-09 20:52:20','2016-03-09 20:52:20',NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userGroup`
+--
+
+DROP TABLE IF EXISTS `userGroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userGroup` (
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `userId` varchar(40) NOT NULL DEFAULT '',
+  `groupId` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`userId`,`groupId`),
+  KEY `usergroup_idx_groupid` (`groupId`),
+  KEY `usergroup_idx_userid` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userGroup`
+--
+
+LOCK TABLES `userGroup` WRITE;
+/*!40000 ALTER TABLE `userGroup` DISABLE KEYS */;
+/*!40000 ALTER TABLE `userGroup` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `userPreferences`
+--
+
+DROP TABLE IF EXISTS `userPreferences`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `userPreferences` (
+  `userId` varchar(40) NOT NULL,
+  `preferences` mediumtext,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `userPreferences`
+--
+
+LOCK TABLES `userPreferences` WRITE;
+/*!40000 ALTER TABLE `userPreferences` DISABLE KEYS */;
+/*!40000 ALTER TABLE `userPreferences` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-10-19 21:28:10

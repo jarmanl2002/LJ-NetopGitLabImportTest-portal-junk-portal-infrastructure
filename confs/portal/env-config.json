@@ -1,0 +1,74 @@
+{
+  "cm"    : ["ec2-54-229-224-17.eu-west-1.compute.amazonaws.com:6502", "ec2-54-229-239-82.eu-west-1.compute.amazonaws.com:6502"],
+  "cs"    : ["ec2-54-229-230-39.eu-west-1.compute.amazonaws.com:6502","ec2-54-229-213-135.eu-west-1.compute.amazonaws.com:6502"],
+  "wcs"   : ["https://wcs-x.netop.com"],
+  "auth"  : {
+    "server" : {
+      "protocol"  : "https",
+      "hostname"  : ["nas-local.netop.com"],
+      "port"      : 443
+    },
+    "service" :{
+      "login"     : {
+        "path"  : "/auth/v1/login",
+        "method"    : "POST"
+      },
+      "logout"    : {
+        "path"  : "/auth/v1/logout",
+        "method"    : "GET"
+      },
+      "checkSession": {
+        "path"    : "/auth/v1/checkSession",
+        "method"  : "GET"
+      }
+    },
+    "rest": {
+      "user": "/api/user"
+    },
+      "apikey": {
+      "user": "/api/key/user"
+    }
+  },
+  "rest": {
+    "server" : {
+      "protocol"  : "https",
+      "hostname"  : ["portal-local.netop.com"],
+      "port"      : 443
+    },
+    "website" : {
+      "keepalive" : "/api/v1/utils/keepalive",
+      "whoami" : "/api/v1/utils/check"
+    },
+    "service" : {
+      "user" : "/api/v1/rest/user",
+      "login" : "/profile/login",
+      "clearPasswordResetCode"  : "/profile/invalid/",
+      "resetPassword": "/profile/reset/"
+    }
+  },
+  "autz": {
+    "server": {
+      "headers":  {
+        "origin": "portal-local.netop.com"
+      },
+      "protocol": "https",
+      "hostname": ["portal-local.netop.com"],
+      "port": 443
+    },
+    "service": {
+      "authorize": {
+        "path": "/api/v2/authorize/verify",
+        "method":"POST"
+      }
+
+    }
+  },
+  "webclient": {
+    "server": {
+      "protocol": "https",
+      "hostname": ["portal-local.netop.com"],
+      "port":     443
+    }
+  }
+}
+

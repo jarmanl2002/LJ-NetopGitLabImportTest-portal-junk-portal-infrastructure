@@ -1,0 +1,17 @@
+FROM nginx:latest
+MAINTAINER Octavian Ionescu<ocio@netop.com>
+
+COPY build.tar.gz /root/
+
+RUN cd /root \
+    && tar zxvf build.tar.gz \
+    && mkdir /usr/share/nginx/html/{portal,account,nas} \
+    && mkdir /var/log/nginx/netop \
+    && mkdir /etc/nginx/ssl \
+    && mv build/cert/wildcard* /etc/nginx/ssl/ \
+    && mv -f build/nginx.conf /etc/nginx/nginx.conf \
+    && rm -rf /etc/nginx/conf.d/* \
+    && mv build/portalapi.netop.com.conf /etc/nginx/conf.d/portalapi.netop.com.conf
+ 
+
+EXPOSE 80 443

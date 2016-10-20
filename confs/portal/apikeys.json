@@ -1,0 +1,15 @@
+{
+  "aAWMSFJrei1fYkuxBLPn3545U9vw2sIi8ebVMZ0FnPcZzbFDnlZ6qyMtTjeJ9cLCEWrRyazlcscAoYz6": {
+    "account": {
+      "seats": 5,
+      "duration": 30
+    }
+  },
+  "ZOkB4O8OWLuitEM9yQLX9vQDT09ZsWuk7VpdwmI63RYvafiuYxkw6hm88Ndh6zgeDTH8FbZevNEhE4cSpIT3ZA53k813eMqjmZ8mVdEQWq1syaxsGIWwo4vd": {
+    "user": true,
+    "device": {
+      "register": true
+    }
+  }
+}
+

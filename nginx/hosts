@@ -1,0 +1,50 @@
+127.0.0.1		localhost.localdomain localhost localhost.netop.com 
+::1		localhost6.localdomain6 localhost6
+192.168.201.138 ro-nrc-itavy testravenjs.netop.itavy.com portal-devalpha.netop.com nas-devalpha.netop.com
+10.168.0.1	desktop.netop.itavy.com openam.netop.itavy.com
+10.168.0.63	sentry.netop.itavy.com
+10.168.0.118	ldap.netop.itavy.com
+192.168.201.170  cristi.netop.com
+
+192.168.201.37	jenkins.local
+
+192.168.200.61 portal-alpha
+192.168.200.63 nas-alpha
+
+192.168.201.199 rbac-alpha
+
+192.168.200.80 nas-gamma
+
+192.168.200.81 portal-gamma
+
+192.168.200.18 nas-win
+
+192.168.200.16 portal-win
+
+192.168.201.34 nas-selenium
+
+192.168.201.34 nas-selenium.netop.com
+
+192.168.201.38 portal-selenium
+
+192.168.201.38 portal-selenium.netop.com
+
+
+
+192.168.201.35 mysql.local
+
+192.168.201.36 cache.local
+
+192.168.201.79 mysql.gamma
+
+192.168.201.75 cache.gamma
+
+192.168.200.16 mysql.win
+
+192.168.200.16 cache.win
+
+# 172.17.42.1  nas-local.netop.com portal-local.netop.com nas.netop.com portal.netop.com ipa.netop.itavy.com
+192.168.200.15  ro-buc-fs01
+
+172.17.42.1 portal-nas.netop.com
+172.17.42.1 portal-portal.netop.com
