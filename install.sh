@@ -1,4 +1,5 @@
 #!/bin/bash
+#### @TODO add nas-local.netop.com to /etc/hosts
 echo "Login to netop registry using domain credentials:"
 docker login git.netop.com:4545
 
