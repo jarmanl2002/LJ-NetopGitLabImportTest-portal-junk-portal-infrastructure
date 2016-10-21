@@ -1,10 +1,17 @@
 #!/bin/bash
+if [ $# -ne 2 ]; then
+  echo "invalid number of arguments";
+  exit 2;
+fi
+
 echo "Login to netop registry using domain credentials:"
 docker login git.netop.com:4545
 
-CURREND_DIRECTORY=`pwd`;
-INSTALL_DIR="/home/itavy/tmp/transfer/projects";
-DOCKER_IP="172.17.0.1";
+CURREND_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+
+
+INSTALL_DIR="$1" # ex "/home/itavy/tmp/transfer/test2";
+DOCKER_IP="$2" # ex "172.17.0.1";
 
 mkdir -p "$INSTALL_DIR"/{portal,nas,weblogs,permissions};
 mkdir -p "$INSTALL_DIR"/portal/{logs,config/env};
@@ -51,6 +58,7 @@ npm install && npm run build;
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
 git clone git@git.netop.com:portal/netop-nas.git "$INSTALL_DIR"/nas/project;
 git clone git@git.netop.com:portal/netop-permissions.git "$INSTALL_DIR"/permissions/project;
+
 cd "$CURREND_DIRECTORY";
 
 
@@ -59,7 +67,6 @@ cd rabbitmq
 docker build -t netop-rabbitmq -f Dockerfile.rabbitmq . \
 && docker run -d --name netop-MQ -p 5671:5671 -p 5672:5672 -p 25672:25672 -p 4369:4369 -d netop-rabbitmq \
 && docker exec -t netop-MQ /bin/sh -c "cd /root && ./test.sh && ./doQueues.sh"
-
 cd ../
 
 #MYSQL
@@ -92,7 +99,6 @@ docker build -t netop-nginx -f Dockerfile.nginx .
 
 rm -rf build build.tar.gz
 
-
 docker run \
 --name netop-web \
 -p 80:80 -p 443:443 \
@@ -101,35 +107,32 @@ docker run \
 -v "$INSTALL_DIR"/weblogs:/var/log/nginx/netop \
 -d netop-nginx 
 
-
-
 docker run \
 -d \
 --name netop-portal \
--p 8083:80 \
+-p 8083:8083 \
 -v "$INSTALL_DIR"/portal/project:/netop-worker/files \
 -v "$INSTALL_DIR"/portal/config:/netop-worker/config \
 -v "$INSTALL_DIR"/portal/logs:/netop-worker/logs \
 git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
 
 echo "install portal dependencies"
-docker exec -t netop-portal /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall";
+docker exec -t netop-portal /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
 echo "finish install portal dependencies"
 docker stop netop-portal
 
 docker run \
 -d \
 --name netop-nas \
--p 8084:80 \
+-p 8084:8084 \
 -v "$INSTALL_DIR"/nas/project:/netop-worker/files \
 -v "$INSTALL_DIR"/nas/config:/netop-worker/config \
 -v "$INSTALL_DIR"/nas/logs:/netop-worker/logs \
 git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
 
 
-
 echo "install nas dependencies"
-docker exec -t netop-nas /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall"
+docker exec -t netop-nas /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall";
 echo "finish nas dependencies"
 
 docker stop netop-nas
@@ -141,8 +144,14 @@ docker run \
 -v "$INSTALL_DIR"/permissions/config:/netop-worker/config \
 -v "$INSTALL_DIR"/permissions/logs:/netop-worker/logs \
 git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
+
 echo "install permissions dependencies"
-docker exec -t netop-permissions /bin/sh -c "cd /netop-worker/files && npm install"
+docker exec -t netop-permissions /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall";
 echo "finish permissions dependencies"
 
 docker stop netop-permissions
+
+echo "You must add following line to /etc/hosts:"
+echo "$DOCKER_IP  nas-local.netop.com portal-local.netop.com";
+echo ""
+echo ""
