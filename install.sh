@@ -1,4 +1,8 @@
 #!/bin/bash
+echo "Login to netop registry using domain credentials:"
+docker login git.netop.com:4545
+
+CURREND_DIRECTORY=`pwd`;
 INSTALL_DIR="/home/itavy/tmp/transfer/projects";
 DOCKER_IP="172.17.0.1";
 
@@ -36,10 +40,17 @@ sed -i "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local
 sed -i "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
 
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
+cd "$INSTALL_DIR"/portal-frontend;
+npm install && npm run build;
+
 git clone git@git.netop.com:portal/netop-nas-frontend.git "$INSTALL_DIR"/nas-frontend;
+cd "$INSTALL_DIR"/nas-frontend;
+npm install && npm run build;
+
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
 git clone git@git.netop.com:portal/netop-nas.git "$INSTALL_DIR"/nas/project;
 git clone git@git.netop.com:portal/netop-permissions.git "$INSTALL_DIR"/permissions/project;
+cd "$CURREND_DIRECTORY";
 
 
 #MQ
