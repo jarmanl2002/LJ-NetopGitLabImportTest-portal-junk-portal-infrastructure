@@ -49,7 +49,7 @@
   "autz": {
     "server": {
       "headers":  {
-        "origin": "portal-local.netop.com"
+        "origin": "portal.netop.com"
       },
       "protocol": "https",
       "hostname": ["portal-local.netop.com"],

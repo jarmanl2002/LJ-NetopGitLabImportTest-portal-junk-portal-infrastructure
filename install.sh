@@ -105,21 +105,21 @@ docker run \
 docker run \
 -d \
 --name netop-portal \
--p 8084:80 \
+-p 8083:80 \
 -v "$INSTALL_DIR"/portal/project:/netop-worker/files \
 -v "$INSTALL_DIR"/portal/config:/netop-worker/config \
 -v "$INSTALL_DIR"/portal/logs:/netop-worker/logs \
 git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
 
 echo "install portal dependencies"
-docker exec -t netop-portal /bin/sh -c "cd /netop-worker/files && npm install"
+docker exec -t netop-portal /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall";
 echo "finish install portal dependencies"
 docker stop netop-portal
 
 docker run \
 -d \
 --name netop-nas \
--p 8083:80 \
+-p 8084:80 \
 -v "$INSTALL_DIR"/nas/project:/netop-worker/files \
 -v "$INSTALL_DIR"/nas/config:/netop-worker/config \
 -v "$INSTALL_DIR"/nas/logs:/netop-worker/logs \
@@ -128,7 +128,7 @@ git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
 
 
 echo "install nas dependencies"
-docker exec -t netop-nas /bin/sh -c "cd /netop-worker/files && npm install"
+docker exec -t netop-nas /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall"
 echo "finish nas dependencies"
 
 docker stop netop-nas

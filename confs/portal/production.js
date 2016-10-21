@@ -49,7 +49,7 @@ module.exports = {
     SESSION_COOKIE_NAME:    'PORTALID',
     NAS_COOKIE_NAME:        'SESSIONID',
     SESSION_HTTP_ONLY: true,
-    SESSION_SECURE: false,
+    SESSION_SECURE: true,
     SESSION_PROXY: true,
     NAS_SHARED_SECRET: 'ZOkB4O8OWLuitEM9yQLX9vQDT09ZsWuk7VpdwmI63RYvafiuYxkw6hm88Ndh6zgeDTH8FbZevNEhE4cSpIT3ZA53k813eMqjmZ8mVdEQWq1syaxsGIWwo4vd'
   },
