@@ -1,5 +1,4 @@
 #!/bin/bash
-#### @TODO add nas-local.netop.com to /etc/hosts
 echo "Login to netop registry using domain credentials:"
 docker login git.netop.com:4545
 
@@ -30,6 +29,7 @@ SED_FILE="$INSTALL_DIR"/portal/config/app.env
 sed -i "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
 sed -i "s/<redishost>/$DOCKER_IP/" "$SED_FILE";
 sed -i "s/mysql:\/\/root:dev@<host>\/portal/mysql:\/\/root:dev@$DOCKER_IP\/portal/" "$SED_FILE";
+sed -i "s/<_nasip_>/$DOCKER_IP/" "$SED_FILE"; # nas-local.netop.com to hosts
 
 SED_FILE="$INSTALL_DIR"/nas/config/app.env
 sed -i "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
