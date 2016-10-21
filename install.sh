@@ -146,7 +146,7 @@ docker run \
 git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
 
 echo "install permissions dependencies"
-docker exec -t netop-permissions /bin/sh -c "cd /netop-worker/files && npm install && npm run postinstall";
+docker exec -t netop-permissions /bin/sh -c "cd /netop-worker/files && npm install";
 echo "finish permissions dependencies"
 
 docker stop netop-permissions
