@@ -10,7 +10,9 @@
 `cd portal-infrastructure`
 * edit install.sh and replace `INSTALL_DIR="/Users/raduluncasu/_Projects/netop";` with your own path
   * if you are on Mac you will also need to add an empty extension param to all `sed -i` commands, like this  
-    `sed -i "s/host: 'localhost',/host: '$DOCKER_IP',/" "$SED_FILE"` =>  
+    `sed -i "s/host: 'localhost',/host: '$DOCKER_IP',/" "$SED_FILE"`  
+                                          &#x25BC;  &#x25BC;  &#x25BC;  &#x25BC;  
+                                          &#x25BC;  &#x25BC;  &#x25BC;  &#x25BC;  
     `sed -i "" "s/host: 'localhost',/host: '$DOCKER_IP',/" "$SED_FILE"`
 * save & run `./install.sh`
 * wait a while
