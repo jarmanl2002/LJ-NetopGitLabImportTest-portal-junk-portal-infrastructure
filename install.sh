@@ -1,8 +1,18 @@
 #!/bin/bash
+set -x;
 if [ $# -ne 2 ]; then
   echo "invalid number of arguments";
   echo "first parameter must be full path to projects folder";
   echo "second parameter must me the ip of the docker interface (ex. docker0)";
+  exit 2;
+fi
+#sed completion for osx
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    SED_COMPLETION="";
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_COMPLETION=" \"\"";
+else
+  echo "Unsuported platform";
   exit 2;
 fi
 
@@ -25,18 +35,21 @@ NETOP_USER_ID=`id -u`;
 NETOP_USER_GROUP_ID=`id -g $NETOP_USER_NAME`;
 NETOP_USER_GROUP_NAME=`id -gn $NETOP_USER_NAME`;
 
+
 if [ -f Dockerfile.localDeveloper ]; then
   rm -rf Dockerfile.localDeveloper;
 fi
-cp Dockerfile.netopDeveloper Dockerfile.localDeveloper;
-
-sed -i"" "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.localDeveloper;
-sed -i"" "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.localDeveloper;
-sed -i"" "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
-sed -i"" "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
+if [ "$NETOP_USER_ID" == "0" ]; then
+  cp Dockerfile.root.localDeveloper Dockerfile.localDeveloper;
+else
+  cp Dockerfile.netopDeveloper Dockerfile.localDeveloper;
+  sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.localDeveloper;
+  sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.localDeveloper;
+  sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
+  sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
+fi
 
 docker build -t netop_local_develop -f Dockerfile.localDeveloper .
-
 
 mkdir -p "$INSTALL_DIR"/{portal,nas,weblogs,permissions};
 mkdir -p "$INSTALL_DIR"/portal/{logs,config/env};
@@ -54,23 +67,23 @@ cp confs/permission/app.env "$INSTALL_DIR"/permissions/config/
 
 SED_FILE="$INSTALL_DIR"/portal/config/env/production.js
 
-sed -i"" "s/host: 'localhost',/host: '$DOCKER_IP',/" "$SED_FILE"
-sed -i"" "s/'localhost:6379'/'$DOCKER_IP:6379'/" "$SED_FILE"
+sed -i$SED_COMPLETION "s/host: 'localhost',/host: '$DOCKER_IP',/" "$SED_FILE"
+sed -i$SED_COMPLETION "s/'localhost:6379'/'$DOCKER_IP:6379'/" "$SED_FILE"
 
 SED_FILE="$INSTALL_DIR"/portal/config/app.env
-sed -i"" "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
-sed -i"" "s/<redishost>/$DOCKER_IP/" "$SED_FILE";
-sed -i"" "s/mysql:\/\/root:dev@<host>\/portal/mysql:\/\/root:dev@$DOCKER_IP\/portal/" "$SED_FILE";
-sed -i"" "s/<_nasip_>/$DOCKER_IP/" "$SED_FILE"; # nas-local.netop.com to hosts
+sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<redishost>/$DOCKER_IP/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/mysql:\/\/root:dev@<host>\/portal/mysql:\/\/root:dev@$DOCKER_IP\/portal/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<_nasip_>/$DOCKER_IP/" "$SED_FILE"; # nas-local.netop.com to hosts
 
 SED_FILE="$INSTALL_DIR"/nas/config/app.env
-sed -i"" "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
-sed -i"" "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
-sed -i"" "s/<db_host>/$DOCKER_IP/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<db_host>/$DOCKER_IP/" "$SED_FILE";
 
 SED_FILE="$INSTALL_DIR"/permissions/config/app.env
-sed -i"" "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
-sed -i"" "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
+sed -i$SED_COMPLETION "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
 
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
 git checkout develop;
@@ -120,7 +133,7 @@ cp nginx.conf build/
 cp portalapi.netop.com.conf build/
 cp -R cert build/
 
-sed -i"" "s/<dockerip>/$DOCKER_IP/g" build/portalapi.netop.com.conf;
+sed -i$SED_COMPLETION "s/<dockerip>/$DOCKER_IP/g" build/portalapi.netop.com.conf;
 if [ -f build.tar.gz ]; then
   rm -rf build.tar.gz
 fi

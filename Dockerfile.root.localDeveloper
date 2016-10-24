@@ -1,0 +1,4 @@
+FROM git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
+MAINTAINER Octavian Ionescu<ocio@netop.com>
+
+ENTRYPOINT ["/usr/local/bin/su-exec", "<user_name>", "/netop-worker/startMonit.sh"]
