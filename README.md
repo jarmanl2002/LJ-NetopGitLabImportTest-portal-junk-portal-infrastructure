@@ -32,3 +32,8 @@
 * login using:  
 user:`admin@netop.com`  
 pass:`123456`
+
+<br />
+<br />
+## IMPORTANT NOTE:
+when you make a change in any of the following projects: netop-portal, netop-nas or netop-permissions you must manually restart the coresponding container so that the changes take effect 
