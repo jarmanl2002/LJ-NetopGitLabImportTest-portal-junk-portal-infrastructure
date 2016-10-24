@@ -179,3 +179,5 @@ echo "You must add following line to /etc/hosts:"
 echo "$DOCKER_IP  nas-local.netop.com portal-local.netop.com";
 echo ""
 echo ""
+echo "if oyu need to run a command inside docker use the following command:"
+echo "docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec $NETOP_USER_NAME /bin/bash";

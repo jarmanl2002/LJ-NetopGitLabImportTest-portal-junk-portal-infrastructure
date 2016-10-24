@@ -32,7 +32,8 @@
 * login using:  
 user:`admin@netop.com`  
 pass:`123456`
-
+* if you need to run a command inside a docker use following command:
+`docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec "$(id -un)"  /bin/bash`
 <br />
 <br />
 ## IMPORTANT NOTE:
