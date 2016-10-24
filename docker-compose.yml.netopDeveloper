@@ -1,0 +1,73 @@
+version: '1.0.0'
+services:
+  netop-nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - netop_portal_install_dir_placeholder/portal-frontend/public/dist:/usr/share/nginx/html/portal
+      - netop_portal_install_dir_placeholder/nas-frontend/public/dist:/usr/share/nginx/html/nas
+      - netop_portal_install_dir_placeholder/weblogs:/var/log/nginx/netop
+    links:
+      - netop-portal
+      - netop-nas
+  netop-db:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dev
+    ports:
+      - "3306:3306"
+  netop-cache:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  netop-MQ:
+    build:
+      context: ./rabbitmq
+      dockerfile: Dockerfile.rabbitmq.compose
+    ports:
+      - "5671:5671"
+      - "5672:5672"
+      - "25672:25672"
+      - "15672:15672"
+  netop-portal:
+    image: netop_local_develop
+    ports:
+      - "8083:8083"
+    volumes:
+      - netop_portal_install_dir_placeholder/portal/project:/netop-worker/files
+      - netop_portal_install_dir_placeholder/portal/config:/netop-worker/config
+      - netop_portal_install_dir_placeholder/portal/logs:/netop-worker/logs
+    links:
+      - netop-db
+      - netop-cache
+      - netop-MQ
+  netop-nas:
+    image: netop_local_develop
+    ports:
+      - "8084:8084"
+    volumes:
+      - netop_portal_install_dir_placeholder/nas/project:/netop-worker/files
+      - netop_portal_install_dir_placeholder/nas/config:/netop-worker/config
+      - netop_portal_install_dir_placeholder/nas/logs:/netop-worker/logs
+    links:
+      - netop-db
+      - netop-cache
+      - netop-MQ
+  netop-permissions:
+    image: netop_local_develop
+    volumes:
+      - netop_portal_install_dir_placeholder/permissions/project:/netop-worker/files
+      - netop_portal_install_dir_placeholder/permissions/config:/netop-worker/config
+      - netop_portal_install_dir_placeholder/permissions/logs:/netop-worker/logs
+    links:
+      - netop-db
+      - netop-cache
+      - netop-MQ
+    depends_on:
+      - netop-portal

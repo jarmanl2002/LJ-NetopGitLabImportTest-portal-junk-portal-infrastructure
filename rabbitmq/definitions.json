@@ -1,0 +1,97 @@
+{
+  "rabbit_version": "3.6.5",
+  "users": [
+    {
+      "name": "netopusr",
+      "password_hash": "toItigPchosW9lNiJWn4OqczXoOxLCe1Qh6k8qxQCDiZgpvm",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "management"
+    },
+    {
+      "name": "guest",
+      "password_hash": "c/WyUO+fvC+IXD08TENBssxiHCL3Ms5tT+/REN13ZkgmkVNh",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "netop-local"
+    },
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "netopusr",
+      "vhost": "netop-local",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [
+    {
+      "name": "production-permissions-worker",
+      "vhost": "netop-local",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "netop-local-netopExchange",
+      "vhost": "netop-local",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "netop-local-netopExchange",
+      "vhost": "netop-local",
+      "destination": "production-permissions-worker",
+      "destination_type": "queue",
+      "routing_key": "production.portal.account",
+      "arguments": {}
+    },
+    {
+      "source": "netop-local-netopExchange",
+      "vhost": "netop-local",
+      "destination": "production-permissions-worker",
+      "destination_type": "queue",
+      "routing_key": "production.portal.group",
+      "arguments": {}
+    },
+    {
+      "source": "netop-local-netopExchange",
+      "vhost": "netop-local",
+      "destination": "production-permissions-worker",
+      "destination_type": "queue",
+      "routing_key": "production.portal.role",
+      "arguments": {}
+    },
+    {
+      "source": "netop-local-netopExchange",
+      "vhost": "netop-local",
+      "destination": "production-permissions-worker",
+      "destination_type": "queue",
+      "routing_key": "production.portal.roleAssignment",
+      "arguments": {}
+    }
+  ]
+}

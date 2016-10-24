@@ -1,0 +1,7 @@
+FROM rabbitmq:latest
+MAINTAINER Octavian Ionescu<ocio@netop.com>
+
+COPY rabbitmq.config /etc/rabbitmq/rabbitmq.config
+COPY definitions.json /etc/rabbitmq/definitions.json
+
+RUN rabbitmq-plugins enable --offline rabbitmq_management
