@@ -73,16 +73,21 @@ sed -i"" "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-loc
 sed -i"" "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
 
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
+git checkout develop;
 cd "$INSTALL_DIR"/portal-frontend;
 npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-nas-frontend.git "$INSTALL_DIR"/nas-frontend;
+git checkout develop;
 cd "$INSTALL_DIR"/nas-frontend;
 npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
+git checkout develop;
 git clone git@git.netop.com:portal/netop-nas.git "$INSTALL_DIR"/nas/project;
+git checkout develop;
 git clone git@git.netop.com:portal/netop-permissions.git "$INSTALL_DIR"/permissions/project;
+git checkout develop;
 
 cd "$CURREND_DIRECTORY";
 

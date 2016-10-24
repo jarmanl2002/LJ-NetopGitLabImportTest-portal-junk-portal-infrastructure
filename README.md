@@ -3,6 +3,7 @@
 <br>
 <br>
 #### Valid for commit `cd193c21cc033d919f38f9931d1a5f2303f2ee6f` in project Portal/portal-infrastructure
+* you must have installed docker support
 * you must stop any services that are listening on the following ports:
     * 80, 443 (usually nginx or apache)
     * 3306 (usualy mysql)
@@ -18,7 +19,7 @@
 `git clone git@git.netop.com:portal/portal-infrastructure.git`  
 `cd portal-infrastructure`
 
-* save & run `./install.sh <param1> <param2>`
+* run `./install.sh <param1> <param2>`
     * <param1> is full path to folder created earlier (mkdir netop)
     * <param2> is the ip of the docker engine interface (on linux it is usually `docker0` interface)
 * wait a while
@@ -34,6 +35,20 @@ user:`admin@netop.com`
 pass:`123456`
 * if you need to run a command inside a docker use following command:
 `docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec "$(id -un)"  /bin/bash`
+* for each project it will create 3 distinct folders:
+    * config
+        * it will contain a special file app.env in which are defined env variables needed for the process to run
+        * the format for defining a new variable is : `export <variable_name>="<variable_value>"`
+        * a special variable in this file is "NODEJS_FILETOSTART" which by default it has the following value: "server.js" 
+            * if there is another file from which the process must start you will override here the value of this variable with the relative path of the file to the project root
+    * logs
+        * it will contain 2 files: error.log and output.log
+        * each will contain messages from stderr or stdoud from the running process
+    * project
+        * it will contain all the project files and dependent modules
+        * all the changes regarding the behaviour of the process are made here, ex:
+            * change a file
+            * switch another branch
 <br />
 <br />
 ## IMPORTANT NOTE:
