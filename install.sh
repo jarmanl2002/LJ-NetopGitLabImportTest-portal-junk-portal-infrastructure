@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x;
 if [ $# -ne 2 ]; then
   echo "invalid number of arguments";
   echo "first parameter must be full path to projects folder";
