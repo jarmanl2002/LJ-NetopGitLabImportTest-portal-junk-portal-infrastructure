@@ -1,0 +1,5 @@
+.idea
+.kateproject
+.kateproject.d
+.DS_Store
+Dockerfile.localDeveloper

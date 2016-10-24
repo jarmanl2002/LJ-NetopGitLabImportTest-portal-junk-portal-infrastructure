@@ -1,0 +1,12 @@
+FROM git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2
+MAINTAINER Octavian Ionescu<ocio@netop.com>
+
+RUN set -x \
+  && groupadd -g <group_id> <group_name> \
+  && useradd -m -g <group_name> -G wheel -u <user_id> <user_name> \
+  && cp /root/.npmrc ~<user_name>/ \
+  && chown <user_name>. ~<user_name>/.npmrc \
+  && cp -R /root/.ssh ~<user_name>/ \
+  && chown -R <user_name>. ~<user_name>/.ssh
+
+ENTRYPOINT ["/usr/local/bin/su-exec", "<user_name>", "/netop-worker/startMonit.sh"]
