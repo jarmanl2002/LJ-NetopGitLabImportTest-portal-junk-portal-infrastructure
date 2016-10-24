@@ -3,6 +3,12 @@
 <br>
 <br>
 #### Valid for commit `cd193c21cc033d919f38f9931d1a5f2303f2ee6f` in project Portal/portal-infrastructure
+* you must stop any services that are listening on the following ports:
+    * 80, 443 (usually nginx or apache)
+    * 3306 (usualy mysql)
+    * 5671 5672 25672 4369 (usually rabbitmq)
+    * 6379 (usually redis)
+    * 8083 and 8084 (those two are required for portal and nas http servers)
 * you must have nodejs installed on the local machine, because it will be needed to build the frontend projects
 * you must have the apropiate ssh key in place for accessing git and `.npmrc` file in the home folder of the user under which the installer will be run
 * the installer will clone the required projects and it will setup permissions for the files for the user under which it is running
