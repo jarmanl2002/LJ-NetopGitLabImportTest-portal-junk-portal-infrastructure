@@ -148,6 +148,7 @@ docker run \
 netop_local_develop
 
 echo "install portal dependencies"
+docker exec -t netop-portal sed -i '4i auth sufficient pam_wheel.so trust use_uid' /etc/pam.d/su;
 docker exec -t netop-portal /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
 echo "finish install portal dependencies"
 docker stop netop-portal
@@ -184,5 +185,5 @@ echo "You must add following line to /etc/hosts:"
 echo "$DOCKER_IP  nas-local.netop.com portal-local.netop.com";
 echo ""
 echo ""
-echo "if oyu need to run a command inside docker use the following command:"
+echo "if you need to run a command inside docker use the following command:"
 echo "docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec $NETOP_USER_NAME /bin/bash";
