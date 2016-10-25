@@ -1,5 +1,5 @@
 messagebus:
-  image: netop-rabbitmq
+  image: git.netop.com:4545/portal/portal-docker-images:dev-rabbitmq
   hostname: netop-rabbitmq
   ports:
     - 5671:5671
@@ -8,19 +8,19 @@ messagebus:
     - 4369:4369
   command: bash -c "export TERM=xterm && cd /root && su root && rabbitmq-server start -detached && ./test.sh && ./doQueues.sh && tail -f /etc/hosts"
 database:
-  image: netop-mysql
+  image: git.netop.com:4545/portal/portal-docker-images:dev-mysql
   hostname: netop-mysql
   ports:
     - 3306:3306
   environment:
    - MYSQL_ROOT_PASSWORD=dev
 cache:
-  image: redis:latest
+  image: git.netop.com:4545/portal/portal-docker-images:dev-redis
   hostname: netop-cache
   ports:
     - 6379:6379
 nginx:
-  image: netop-nginx
+  image: git.netop.com:4545/portal/portal-docker-images:dev-nginx
   hostname: netop-nginx
   command: bash -c "export TERM=xterm && service nginx start"
   volumes:
@@ -32,7 +32,7 @@ nginx:
     - 80:80
     - 443:443
 netop-permissions:
-  image: netop_local_develop
+  image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-permissions
   links:
     - messagebus
@@ -45,7 +45,7 @@ netop-permissions:
     - ./wait-for-it-master:/tools
   entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
 netop-nas:
-  image: netop_local_develop
+  image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-nas
   links:
     - netop-permissions
@@ -58,7 +58,7 @@ netop-nas:
     - ./wait-for-it-master:/tools
   entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 netop-permissions:3003 && cd /netop-worker/files && echo "START INSTALL NAS MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE INSTALLING NAS MODULES" && sh /netop-worker/startMonit.sh'
 netop-portal:
-  image: netop_local_develop
+  image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-portal
   links:
     - netop-nas

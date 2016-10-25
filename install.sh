@@ -110,13 +110,13 @@ tar czvf build.tar.gz build
 #git projects
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
 cd "$INSTALL_DIR"/portal-frontend;
-#git checkout develop;
-#npm install && npm run build;
+git checkout develop;
+npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-nas-frontend.git "$INSTALL_DIR"/nas-frontend;
 cd "$INSTALL_DIR"/nas-frontend;
-#git checkout develop;
-#npm install && npm run build;
+git checkout develop;
+npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
 cd "$INSTALL_DIR"/portal/project;
@@ -133,19 +133,7 @@ chown -R $NETOP_USER_NAME. $INSTALL_DIR;
 
 # this can be converted to docker-compose when i will figure out how to inject definitions at build time
 #MQ
-cd rabbitmq
-docker build -t netop-rabbitmq -f Dockerfile.rabbitmq .
-cd ../
 
-# from here it can be converted to docker-compose
-#MYSQL
-cd mysql
-docker build -t netop-mysql -f Dockerfile.mysql .
-cd ../
-
-#NGINX
-cd nginx
-docker build -t netop-nginx -f Dockerfile.nginx .
 
 
 # end docker compose
