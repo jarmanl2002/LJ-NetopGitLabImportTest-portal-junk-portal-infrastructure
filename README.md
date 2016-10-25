@@ -19,6 +19,24 @@
 `git clone git@git.netop.com:portal/portal-infrastructure.git`  
 `cd portal-infrastructure`
 
+## install with docker-compose
+* you must have installed docker-compose support
+    * if docker-compose command is njotin you path edit file `docker-compose.env` and set the var `COMPOSE_COMMAND` with full path command for docker compose 
+* run `./install-compose.sh <param1> (<param2>)`
+    * <param1> is full path to folder created earlier (mkdir netop)
+    * <param2> is optional; is the name of the service you want to rebuild:
+        * netop-cache
+        * netop-db
+        * netop-mq
+        * netop-web
+        * netop-portal
+        * netop-nas
+        * netop-permissions
+
+<br>
+<br>
+<br>
+## install without docker-compose
 * run `./install.sh <param1> <param2>`
     * <param1> is full path to folder created earlier (mkdir netop)
     * <param2> is the ip of the docker engine interface (on linux it is usually `docker0` interface)
@@ -27,7 +45,13 @@
 `docker start netop-portal`
 `docker start netop-nas`
 `docker start netop-permissions`
-* edit your hosts file & add the following lines (replacing the IP with your docker-ip - <param2> for the install.sh) :  
+
+<br>
+<br>
+<br>
+## usage
+
+* edit your hosts file & add the following lines (replacing the IP with your docker-ip) :  
 `<docker interface ip>	portal-local.netop.com nas-local.netop.com`
 * navigate to http://portal-local.netop.com
 * login using:  
@@ -35,6 +59,8 @@ user:`admin@netop.com`
 pass:`123456`
 * if you need to run a command inside a docker use following command:
 `docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec "$(id -un)"  /bin/bash`
+or (if you used docker command)
+`docker-compose exec <service-name> /usr/local/bin/su-exec itavy /bin/bash`
 * for each project it will create 3 distinct folders:
     * config
         * it will contain a special file app.env in which are defined env variables needed for the process to run
@@ -49,7 +75,9 @@ pass:`123456`
         * all the changes regarding the behaviour of the process are made here, ex:
             * change a file
             * switch another branch
-<br />
-<br />
+
+<br>
+<br>
+<br>
 ## IMPORTANT NOTE:
 when you make a change in any of the following projects: netop-portal, netop-nas or netop-permissions you must manually restart the coresponding container so that the changes take effect 
