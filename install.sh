@@ -26,11 +26,7 @@ INSTALL_DIR="$1" # ex "/home/itavy/tmp/transfer/test2";
 DOCKER_IP="$2" # ex "172.17.0.1";
 
 
-# user details for folders mappings
-NETOP_USER_NAME=`id -un`;
-NETOP_USER_ID=`id -u`;
-NETOP_USER_GROUP_ID=`id -g $NETOP_USER_NAME`;
-NETOP_USER_GROUP_NAME=`id -gn $NETOP_USER_NAME`;
+
 
 
 
@@ -93,8 +89,7 @@ git clone git@git.netop.com:portal/netop-permissions.git "$INSTALL_DIR"/permissi
 cd "$INSTALL_DIR"/permissions/project;
 git checkout develop;
 
-cd "$CURREND_DIRECTORY";
-chown -R $NETOP_USER_NAME. $INSTALL_DIR;
+
 
 # this can be converted to docker-compose when i will figure out how to inject definitions at build time
 #MQ
@@ -108,4 +103,3 @@ echo "$DOCKER_IP  nas-local.netop.com portal-local.netop.com";
 echo ""
 echo ""
 echo "if you need to run a command inside docker use the following command:"
-echo "docker exec -it (<dockerid>|<docker-name>) /usr/local/bin/su-exec $NETOP_USER_NAME /bin/bash";
