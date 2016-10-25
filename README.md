@@ -2,7 +2,7 @@
 <br>
 <br>
 <br>
-#### Valid for commit `cd193c21cc033d919f38f9931d1a5f2303f2ee6f` in project Portal/portal-infrastructure
+#### Valid for commit `40c5ab6407c80d3b162e64c4accf830d2165da3d` in project Portal/portal-infrastructure
 * you must have installed docker support
 * you must stop any services that are listening on the following ports:
     * 80, 443 (usually nginx or apache)
