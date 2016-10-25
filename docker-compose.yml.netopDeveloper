@@ -1,4 +1,4 @@
-version: '1.0.0'
+version: '2.0'
 services:
   netop-web:
     build:
@@ -11,6 +11,11 @@ services:
       - netop_portal_install_dir_placeholder/portal-frontend/public/dist:/usr/share/nginx/html/portal
       - netop_portal_install_dir_placeholder/nas-frontend/public/dist:/usr/share/nginx/html/nas
       - netop_portal_install_dir_placeholder/weblogs:/var/log/nginx/netop
+    networks:
+      default:
+        aliases:
+          - nas-local.netop.com
+          - portal-local.netop.com
     links:
       - netop-portal
       - netop-nas
@@ -18,18 +23,26 @@ services:
     build:
       context: ./mysql
       dockerfile: Dockerfile.mysql
+    networks:
+      - default
     environment:
       MYSQL_ROOT_PASSWORD: dev
+    volumes:
+      - netop_portal_install_dir_placeholder/database:/var/lib/mysql
     ports:
       - "3306:3306"
   netop-cache:
     image: redis:latest
+    networks:
+      - default
     ports:
       - "6379:6379"
-  netop-MQ:
+  netop-mq:
     build:
       context: ./rabbitmq
       dockerfile: Dockerfile.rabbitmq.compose
+    networks:
+      - default
     ports:
       - "5671:5671"
       - "5672:5672"
@@ -37,6 +50,8 @@ services:
       - "15672:15672"
   netop-portal:
     image: netop_local_develop
+    networks:
+      - default
     ports:
       - "8083:8083"
     volumes:
@@ -46,9 +61,12 @@ services:
     links:
       - netop-db
       - netop-cache
-      - netop-MQ
+      - netop-mq
+      - netop-nas
   netop-nas:
     image: netop_local_develop
+    networks:
+      - default
     ports:
       - "8084:8084"
     volumes:
@@ -58,15 +76,17 @@ services:
     links:
       - netop-db
       - netop-cache
-      - netop-MQ
+      - netop-mq
   netop-permissions:
     image: netop_local_develop
+    networks:
+      - default
     volumes:
       - netop_portal_install_dir_placeholder/permissions/project:/netop-worker/files
       - netop_portal_install_dir_placeholder/permissions/config:/netop-worker/config
       - netop_portal_install_dir_placeholder/permissions/logs:/netop-worker/logs
     links:
       - netop-cache
-      - netop-MQ
+      - netop-mq
     depends_on:
       - netop-portal

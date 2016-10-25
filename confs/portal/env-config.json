@@ -31,18 +31,20 @@
   },
   "rest": {
     "server" : {
-      "protocol"  : "https",
-      "hostname"  : ["portal-local.netop.com"],
-      "port"      : 443
+      "protocol": "https",
+      "hostname": [
+        "portal-local.netop.com"
+      ],
+      "port": 443
     },
     "website" : {
       "keepalive" : "/api/v1/utils/keepalive",
       "whoami" : "/api/v1/utils/check"
     },
     "service" : {
-      "user" : "/api/v1/rest/user",
-      "login" : "/profile/login",
-      "clearPasswordResetCode"  : "/profile/invalid/",
+      "user": "/api/v1/rest/user",
+      "login": "/profile/login",
+      "clearPasswordResetCode": "/profile/invalid/",
       "resetPassword": "/profile/reset/"
     }
   },
@@ -52,7 +54,9 @@
         "origin": "portal.netop.com"
       },
       "protocol": "https",
-      "hostname": ["portal-local.netop.com"],
+      "hostname": [
+        "portal-local.netop.com"
+      ],
       "port": 443
     },
     "service": {

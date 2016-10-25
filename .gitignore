@@ -4,3 +4,4 @@
 .DS_Store
 Dockerfile.localDeveloper
 docker-compose.env
+docker-compose.yml

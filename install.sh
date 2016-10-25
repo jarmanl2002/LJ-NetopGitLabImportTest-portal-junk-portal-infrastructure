@@ -174,7 +174,6 @@ docker run \
 netop_local_develop
 
 echo "install portal dependencies"
-docker exec -t netop-portal sed -i '4i auth sufficient pam_wheel.so trust use_uid' /etc/pam.d/su;
 docker exec -t netop-portal /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
 echo "finish install portal dependencies"
 docker stop netop-portal
