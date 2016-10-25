@@ -1,0 +1,41 @@
+[33m[nodemon] 1.11.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node /netop-worker/files/bin/start-server.js`[39m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node /netop-worker/files/bin/start-server.js`[39m
+E DE BINE GOGULE
+[33m[nodemon] 1.11.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node /netop-worker/files/bin/start-server.js`[39m
+E DE BINE GOGULE
+LOG 7 [200]  GET  0.012578  /
+LOG 7 [200]  GET  0.00446  /portal/v2/getInfo
+LOG 7 [200]  GET  0.001762  /api/v1/utils/check
+LOG 6 [200]  GET  0.114426  /
+LOG 7 [200]  GET  0.010222  /api/v1/utils/check
+LOG 7 [200]  GET  0.02541  /api/v1/utils/getAccount
+LOG 7 [200]  GET  0.00957  /web/tools/v2/public/date/
+LOG 6 [200]  GET  0.060042  /api/v2/changelog?filter%5BtypeLog%5D=changelog&size=-1&offset=0&sortBy=startdate&sort=desc
+LOG 7 [200]  GET  0.003916  /web/tools/v2/public/date
+LOG 7 [200]  GET  0.006042  /web/tools/v2/public/date/
+LOG 6 [200]  GET  0.061855  /api/v1.1/user/rest/user?size=10&offset=0&sortBy=email&sort=asc
+LOG 6 [200]  GET  0.067337  /api/v1/rest/userTypes?size=-1&sort=asc&sortBy=priority
+LOG 7 [200]  GET  0.011906  /api/v1/rest/userTypes?&size=-1&sortBy=priority&sort=asc
+LOG 7 [200]  GET  0.047371  /api/v1/rest/account?count=1&size=10&offset=0&sortBy=company&sort=asc
+LOG 7 [200]  GET  0.027908  /web/tools/v2/public/date/
+LOG 7 [200]  GET  0.019553  /api/v1.1/role?size=10&offset=0&sortBy=name&sort=asc
+LOG 7 [200]  GET  0.017673  /web/tools/v2/public/date/
+LOG 7 [200]  GET  0.010055  /api/v1/rest/account?count=1&size=10&offset=0&sortBy=company&sort=asc
+LOG 7 [200]  GET  0.0299  /web/tools/v2/public/date/
+LOG 7 [200]  GET  0.007955  /web/tools/v2/public/date/
+LOG 7 [200]  GET  0.038091  /api/v1.1/user/rest/user?size=10&offset=0&sortBy=email&sort=asc
+LOG 7 [200]  GET  0.042486  /api/v1/rest/userTypes?size=-1&sort=asc&sortBy=priority
+LOG 7 [200]  GET  0.015117  /api/v1.1/role?size=10&offset=0&sortBy=name&sort=asc
+LOG 7 [200]  GET  0.025986  /web/tools/v2/public/date/
+LOG 7 [200]  GET  0.00895  /api/v1/rest/account?count=1&size=10&offset=0&sortBy=company&sort=asc
+LOG 7 [200]  GET  0.030654  /web/tools/v2/public/date/
+Server has shutdown
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
