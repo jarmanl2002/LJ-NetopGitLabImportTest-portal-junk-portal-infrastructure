@@ -19,9 +19,6 @@ fi
 echo "Login to netop docker registry using domain credentials:"
 docker login git.netop.com:4545 || exit 1;
 
-echo "Trying to get latest image for developer";
-docker pull git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2 || exit 1;
-
 CURREND_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
 # variables for install setup
@@ -49,8 +46,6 @@ else
   sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
   sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
 fi
-
-docker build -t netop_local_develop -f Dockerfile.localDeveloper .
 
 mkdir -p "$INSTALL_DIR"/{portal,nas,weblogs,permissions};
 mkdir -p "$INSTALL_DIR"/portal/{logs,config/env};
@@ -89,24 +84,6 @@ SED_FILE="$INSTALL_DIR"/permissions/config/app.env
 sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$DOCKER_IP\/netop-local/" "$SED_FILE";
 sed -i$SED_COMPLETION "s/<redis_host>/$DOCKER_IP/" "$SED_FILE";
 
-
-#nginx requirements
-cd nginx;
-if [ -d build ]; then
-  rm -rf build;
-fi
-mkdir build;
-cp Dockerfile.nginx build/
-cp nginx.conf build/
-cp portalapi.netop.com.conf build/
-cp -R cert build/
-
-sed -i$SED_COMPLETION "s/<dockerip>/$DOCKER_IP/g" build/portalapi.netop.com.conf;
-if [ -f build.tar.gz ]; then
-  rm -rf build.tar.gz
-fi
-tar czvf build.tar.gz build
-
 #git projects
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
 cd "$INSTALL_DIR"/portal-frontend;
@@ -137,8 +114,6 @@ chown -R $NETOP_USER_NAME. $INSTALL_DIR;
 
 
 # end docker compose
-
-rm -rf "$CURREND_DIRECTORY"/nginx/build "$CURREND_DIRECTORY"/nginx/build.tar.gz
 
 echo "You must add following line to /etc/hosts:"
 echo "$DOCKER_IP  nas-local.netop.com portal-local.netop.com";
