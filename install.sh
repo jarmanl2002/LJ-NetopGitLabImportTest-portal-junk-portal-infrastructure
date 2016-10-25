@@ -33,19 +33,7 @@ NETOP_USER_GROUP_ID=`id -g $NETOP_USER_NAME`;
 NETOP_USER_GROUP_NAME=`id -gn $NETOP_USER_NAME`;
 
 
-if [ -f Dockerfile.localDeveloper ]; then
-  rm -rf Dockerfile.localDeveloper;
-fi
 
-if [ "$NETOP_USER_ID" == "0" ]; then
-  cp Dockerfile.root.localDeveloper Dockerfile.localDeveloper;
-else
-  cp Dockerfile.netopDeveloper Dockerfile.localDeveloper;
-  sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.localDeveloper;
-  sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.localDeveloper;
-  sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
-  sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
-fi
 
 mkdir -p "$INSTALL_DIR"/{portal,nas,weblogs,permissions};
 mkdir -p "$INSTALL_DIR"/portal/{logs,config/env};
