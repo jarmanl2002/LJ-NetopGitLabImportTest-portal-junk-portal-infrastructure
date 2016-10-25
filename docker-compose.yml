@@ -36,6 +36,7 @@ netop-permissions:
   hostname: netop-permissions
   links:
     - messagebus
+    - cache
   ports:
     - 3003:3003
   volumes:
@@ -43,7 +44,7 @@ netop-permissions:
     - ./workspace/permissions/config:/netop-worker/config
     - ./workspace/permissions/logs:/netop-worker/logs
     - ./wait-for-it-master:/tools
-  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
+  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && sh /tools/wait-for-it.sh -t 0 cache:6379 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
 netop-nas:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-nas
