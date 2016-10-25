@@ -1,0 +1,61 @@
+messagebus:
+  image: netop-rabbitmq
+  hostname: netop-rabbitmq
+  ports:
+    - 5671:5671
+    - 5672:5672
+    - 25672:25672
+    - 4369:4369
+  command: bash -c "export TERM=xterm && cd /root && su root && rabbitmq-server start -detached && ./test.sh && ./doQueues.sh && tail -f /etc/hosts"
+database:
+  image: netop-mysql
+  hostname: netop-mysql
+  ports:
+    - 3306:3306
+  environment:
+   - MYSQL_ROOT_PASSWORD=dev
+cache:
+  image: redis:latest
+  hostname: netop-cache
+  ports:
+    - 6379:6379
+nginx:
+  image: netop-nginx
+  hostname: netop-nginx
+  command: bash -c "export TERM=xterm && service nginx start"
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./workspace/portal-frontend/public/dist:/usr/share/nginx/html/portal
+    - ./workspace/nas-frontend/public/dist:/usr/share/nginx/html/nas
+    - ./workspace/weblogs:/var/log/nginx/netop
+  ports:
+    - 80:80
+    - 443:443
+netop-permissions:
+  image: netop_local_develop
+  hostname: netop-permissions
+  volumes:
+    - ./workspace/permissions/project:/netop-worker/files
+    - ./workspace/permissions/config:/netop-worker/config
+    - ./workspace/permissions/logs:/netop-worker/logs
+  command: bash -c 'su root && cd /netop-worker/files && /usr/local/bin/npm install'
+netop-nas:
+  image: netop_local_develop
+  hostname: netop-nas
+  ports:
+    - 8084:8084
+  volumes:
+    - ./workspace/nas/project:/netop-worker/files
+    - ./workspace/nas/config:/netop-worker/config
+    - ./workspace/nas/logs:/netop-worker/logs
+  command: bash -c 'su root && cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall'
+netop-portal:
+  image: netop_local_develop
+  hostname: netop-portal
+  ports:
+    - 8083:8083
+  volumes:
+    - ./workspace/portal/project:/netop-worker/files
+    - ./workspace/portal/config:/netop-worker/config
+    - ./workspace/portal/logs:/netop-worker/logs
+  command: bash -c 'su root && cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall'

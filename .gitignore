@@ -3,3 +3,4 @@
 .kateproject.d
 .DS_Store
 Dockerfile.localDeveloper
+workspace/
