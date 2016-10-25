@@ -110,13 +110,13 @@ tar czvf build.tar.gz build
 #git projects
 git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
 cd "$INSTALL_DIR"/portal-frontend;
-git checkout develop;
-npm install && npm run build;
+#git checkout develop;
+#npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-nas-frontend.git "$INSTALL_DIR"/nas-frontend;
 cd "$INSTALL_DIR"/nas-frontend;
-git checkout develop;
-npm install && npm run build;
+#git checkout develop;
+#npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
 cd "$INSTALL_DIR"/portal/project;
@@ -134,80 +134,19 @@ chown -R $NETOP_USER_NAME. $INSTALL_DIR;
 # this can be converted to docker-compose when i will figure out how to inject definitions at build time
 #MQ
 cd rabbitmq
-docker build -t netop-rabbitmq -f Dockerfile.rabbitmq . \
-&& docker run -d --name netop-MQ -p 5671:5671 -p 5672:5672 -p 25672:25672 -p 4369:4369 -d netop-rabbitmq \
-&& docker exec -t netop-MQ /bin/sh -c "cd /root && ./test.sh && ./doQueues.sh"
+docker build -t netop-rabbitmq -f Dockerfile.rabbitmq .
 cd ../
-
 
 # from here it can be converted to docker-compose
 #MYSQL
 cd mysql
 docker build -t netop-mysql -f Dockerfile.mysql .
-docker run --name netop-db -e MYSQL_ROOT_PASSWORD=dev -p 3306:3306 -d netop-mysql
 cd ../
 
-#REDIS
-docker run --name netop-cache -p 6379:6379 -d redis:latest
-
 #NGINX
+cd nginx
 docker build -t netop-nginx -f Dockerfile.nginx .
 
-docker run \
---name netop-web \
--p 80:80 -p 443:443 \
--v "$INSTALL_DIR"/portal-frontend/public/dist:/usr/share/nginx/html/portal \
--v "$INSTALL_DIR"/nas-frontend/public/dist:/usr/share/nginx/html/nas \
--v "$INSTALL_DIR"/weblogs:/var/log/nginx/netop \
--d netop-nginx 
-
-
-#NETOP-PORTAL
-docker run \
--d \
---name netop-portal \
--p 8083:8083 \
--v "$INSTALL_DIR"/portal/project:/netop-worker/files \
--v "$INSTALL_DIR"/portal/config:/netop-worker/config \
--v "$INSTALL_DIR"/portal/logs:/netop-worker/logs \
-netop_local_develop
-
-echo "install portal dependencies"
-docker exec -t netop-portal sed -i '4i auth sufficient pam_wheel.so trust use_uid' /etc/pam.d/su;
-docker exec -t netop-portal /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
-echo "finish install portal dependencies"
-docker stop netop-portal
-
-
-#NETOP-NAS
-docker run \
--d \
---name netop-nas \
--p 8084:8084 \
--v "$INSTALL_DIR"/nas/project:/netop-worker/files \
--v "$INSTALL_DIR"/nas/config:/netop-worker/config \
--v "$INSTALL_DIR"/nas/logs:/netop-worker/logs \
-netop_local_develop
-
-
-echo "install nas dependencies"
-docker exec -t netop-nas /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
-echo "finish nas dependencies"
-docker stop netop-nas
-
-#NETOP-PERMISSIONS
-docker run \
--d \
---name netop-permissions \
--v "$INSTALL_DIR"/permissions/project:/netop-worker/files \
--v "$INSTALL_DIR"/permissions/config:/netop-worker/config \
--v "$INSTALL_DIR"/permissions/logs:/netop-worker/logs \
-netop_local_develop
-
-echo "install permissions dependencies"
-docker exec -t netop-permissions /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install";
-echo "finish permissions dependencies"
-docker stop netop-permissions
 
 # end docker compose
 
