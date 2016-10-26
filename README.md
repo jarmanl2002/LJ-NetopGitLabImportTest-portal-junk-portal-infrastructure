@@ -7,20 +7,17 @@
 * docker compose
 * node.js - used for build of the frontend apps
 <br><br>
-#### Usage
+* Usage
+<br>
 `mkdir netop`
-* clone portal-infrastructure project  
 `git clone git@git.netop.com:portal/portal-infrastructure.git`  
 `cd portal-infrastructure`
 `git checkout compose2`
-<br><br>
+`./install.sh` - this will clone all the portal services and setup the convif with the dev environment variables
+`docker-compose up` - will install launch the containers and install the npm modules for all workers
 
-* run `./install.sh` - this will clone all the portal services and setup the convif with the dev environment variables
-* wait a while
 <br>
 <br>
-* when finished , run the docker-compose command :
-`docker-compose up`
 * You can use docker compose to view logs, restart, rebuild containers and more
 * For a detailed documentation please visit https://docs.docker.com/compose/reference/overview/
 <br><br>
