@@ -27,6 +27,8 @@ nginx:
   image: git.netop.com:4545/portal/portal-docker-images:dev-nginx
   hostname: netop-nginx
   command: bash -c "export TERM=xterm && service nginx start"
+  links:
+    - nas-local.netop.com
   volumes:
     - ./image-sources/nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./workspace/portal-frontend/public/dist:/usr/share/nginx/html/portal
@@ -51,9 +53,9 @@ netop-permissions:
     - ./tools/wait-for-it-master:/tools
   entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && sh /tools/wait-for-it.sh -t 0 cache:6379 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
 #nas worker  container
-netop-nas:
+nas-local.netop.com:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
-  hostname: nas-local.netop.com
+  hostname: "nas-local.netop.com"
   links:
     - netop-permissions
     - messagebus
@@ -72,7 +74,7 @@ netop-portal:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-portal
   links:
-    - netop-nas
+    - nas-local.netop.com
     - database
     - cache
     - messagebus
@@ -83,4 +85,4 @@ netop-portal:
     - ./workspace/portal/config:/netop-worker/config
     - ./workspace/portal/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
-  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 netop-nas:8084 && cd /netop-worker/files && echo "START INSTALL PORTAL MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE PORTAL PERMISSIONS MODULES - NETOP-PORTAL IS READY" && sh /netop-worker/startMonit.sh'
+  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 nas-local.netop.com:8084 && cd /netop-worker/files && echo "START INSTALL PORTAL MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE PORTAL PERMISSIONS MODULES - NETOP-PORTAL IS READY" && sh /netop-worker/startMonit.sh'
