@@ -1,3 +1,4 @@
+#rabbitmq container
 messagebus:
   image: git.netop.com:4545/portal/portal-docker-images:dev-rabbitmq
   hostname: netop-rabbitmq
@@ -7,6 +8,7 @@ messagebus:
     - 25672:25672
     - 4369:4369
   command: bash -c "export TERM=xterm && cd /root && su root && rabbitmq-server start -detached && ./test.sh && ./doQueues.sh && tail -f /etc/hosts"
+#mysql container
 database:
   image: git.netop.com:4545/portal/portal-docker-images:dev-mysql
   hostname: netop-mysql
@@ -14,11 +16,13 @@ database:
     - 3306:3306
   environment:
    - MYSQL_ROOT_PASSWORD=dev
+#redis container
 cache:
   image: git.netop.com:4545/portal/portal-docker-images:dev-redis
   hostname: netop-cache
   ports:
     - 6379:6379
+#nginx continaer - serving the frontend apps
 nginx:
   image: git.netop.com:4545/portal/portal-docker-images:dev-nginx
   hostname: netop-nginx
@@ -31,6 +35,7 @@ nginx:
   ports:
     - 80:80
     - 443:443
+#permissions worker container
 netop-permissions:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-permissions
@@ -45,6 +50,7 @@ netop-permissions:
     - ./workspace/permissions/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
   entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && sh /tools/wait-for-it.sh -t 0 cache:6379 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
+#nas worker  container
 netop-nas:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: nas-local.netop.com
@@ -61,6 +67,7 @@ netop-nas:
     - ./workspace/nas/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
   entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 netop-permissions:3003 && cd /netop-worker/files && echo "START INSTALL NAS MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE INSTALLING NAS MODULES" && sh /netop-worker/startMonit.sh'
+#portal worker container
 netop-portal:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
   hostname: netop-portal
