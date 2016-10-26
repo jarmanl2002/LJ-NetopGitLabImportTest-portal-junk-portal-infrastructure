@@ -7,7 +7,7 @@
 * docker compose
 * node.js - used for build of the frontend apps
 <br><br>
-### Usage
+#### Usage
 `mkdir netop`
 * clone portal-infrastructure project  
 `git clone git@git.netop.com:portal/portal-infrastructure.git`  
