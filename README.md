@@ -13,7 +13,7 @@ USAGE
 `git clone git@git.netop.com:portal/portal-infrastructure.git`   <br>
 `cd portal-infrastructure` <br>
 `git checkout compose2` <br>
-`./install.sh` - this will clone all the portal services and setup the convig with the dev environment variables <br>
+`./install.sh` - this will clone all the portal services and setup the config with the dev environment variables <br>
 `docker-compose up` - will install launch the containers and install the npm modules for all workers <br>
 
 * edit your hosts file & add the following lines (replacing the IP with your docker-ip - <param2> for the install.sh) :  
