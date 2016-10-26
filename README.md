@@ -9,12 +9,12 @@
 <br><br>
 * Usage
 <br>
-`mkdir netop`
-`git clone git@git.netop.com:portal/portal-infrastructure.git`  
-`cd portal-infrastructure`
-`git checkout compose2`
-`./install.sh` - this will clone all the portal services and setup the convif with the dev environment variables
-`docker-compose up` - will install launch the containers and install the npm modules for all workers
+`mkdir netop` <br>
+`git clone git@git.netop.com:portal/portal-infrastructure.git`   <br>
+`cd portal-infrastructure` <br>
+`git checkout compose2` <br>
+`./install.sh` - this will clone all the portal services and setup the convif with the dev environment variables <br>
+`docker-compose up` - will install launch the containers and install the npm modules for all workers <br>
 
 <br>
 <br>
