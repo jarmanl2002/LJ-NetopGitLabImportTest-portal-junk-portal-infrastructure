@@ -24,7 +24,7 @@ nginx:
   hostname: netop-nginx
   command: bash -c "export TERM=xterm && service nginx start"
   volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    - ./image-sources/nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./workspace/portal-frontend/public/dist:/usr/share/nginx/html/portal
     - ./workspace/nas-frontend/public/dist:/usr/share/nginx/html/nas
     - ./workspace/weblogs:/var/log/nginx/netop

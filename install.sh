@@ -39,7 +39,6 @@ tput setaf 2;
 echo "STEP 3/3: Build nas frontend"
 tput setaf 9;
 npm install && npm run build;
-npm install && npm run build;
 
 git clone git@git.netop.com:portal/netop-portal-server.git "$INSTALL_DIR"/portal/project;
 cd "$INSTALL_DIR"/portal/project;
