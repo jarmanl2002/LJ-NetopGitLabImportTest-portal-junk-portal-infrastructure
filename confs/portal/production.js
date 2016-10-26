@@ -13,7 +13,7 @@ module.exports = {
       dialect: 'mysql',
       port: 3306,
       username: 'root',
-      host: 'localhost',
+      host: 'database',
       pool: {
         maxConnections: 20,
         maxIdleTime: 30000
@@ -23,7 +23,7 @@ module.exports = {
   cache: {
     engine: 'redis',
     params: {
-      host: 'localhost',
+      host: 'cache',
       port: 6379,
       options: {
         parser:                 'hiredis',
@@ -41,7 +41,7 @@ module.exports = {
     }
   },
   server: {
-    locations: {'localhost:6379' : 1},
+    locations: {'cache:6379' : 1},
     EXPRESS_SESSION_SECRET: 'a534k2jb3rkjnclk2j34kj4j2k3nbcf42jk13dkj234bj4h12b3jkd423bcjbksadjfksbhd pqox,pwmx,pqowksmxqpwcnqjibdvue87dasiu987',
     SESSION_COOKIE_DOMAIN:  'netop.com',
     SESSION_COOKIE_PATH:    '/',
@@ -85,4 +85,3 @@ module.exports = {
     errorUrl:   "https://nas-local.netop.com/profile/email-validation"
   }
 };
-
