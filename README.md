@@ -4,6 +4,27 @@
 <br>
 #### Valid for commit `40c5ab6407c80d3b162e64c4accf830d2165da3d` in project Portal/portal-infrastructure
 * you must have installed docker support
+    * minimum version: 1.10.3  
+`
+$ sudo docker version
+Client:
+ Version:         1.10.3
+ API version:     1.22
+ Package version: docker-1.10.3-44.git8b7fa4a.fc23.x86_64
+ Go version:      go1.5.4
+ Git commit:      8b7fa4a/1.10.3
+ Built:           
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.10.3
+ API version:     1.22
+ Package version: docker-1.10.3-44.git8b7fa4a.fc23.x86_64
+ Go version:      go1.5.4
+ Git commit:      8b7fa4a/1.10.3
+ Built:           
+ OS/Arch:         linux/amd64
+`
 * you must stop any services that are listening on the following ports:
     * 80, 443 (usually nginx or apache)
     * 3306 (usualy mysql)
@@ -21,7 +42,16 @@
 
 ## install with docker-compose
 * you must have installed docker-compose support
-    * if docker-compose command is njotin you path edit file `docker-compose.env` and set the var `COMPOSE_COMMAND` with full path command for docker compose 
+    * if docker-compose command is not in you path edit file `docker-compose.env` and set the var `COMPOSE_COMMAND` with full path command for docker compose
+    * minimum version:
+`
+$ sudo docker-compose version
+docker-compose version 1.7.0, build 0d7bf73
+docker-py version: 1.8.0
+CPython version: 2.7.11
+OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+
+`
 * run `./install-compose.sh <param1> (<param2>)`
     * <param1> is full path to folder created earlier (mkdir netop)
     * <param2> is optional; is the name of the service you want to rebuild:
