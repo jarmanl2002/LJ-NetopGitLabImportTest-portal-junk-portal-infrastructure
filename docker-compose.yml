@@ -2,12 +2,14 @@
 messagebus:
   image: git.netop.com:4545/portal/portal-docker-images:dev-rabbitmq
   hostname: netop-rabbitmq
+  volumes:
+    - ./tools/rabbitmq.sh:/entrypoint/entrypoint.sh
   ports:
     - 5671:5671
     - 5672:5672
     - 25672:25672
     - 4369:4369
-  command: bash -c "export TERM=xterm && cd /root && su root && rabbitmq-server start -detached && ./test.sh && ./doQueues.sh && tail -f /etc/hosts"
+  entrypoint: bash -c "sh /entrypoint/entrypoint.sh"
 #mysql container
 database:
   image: git.netop.com:4545/portal/portal-docker-images:dev-mysql
@@ -26,12 +28,13 @@ cache:
 nas-local.netop.com:
   image: git.netop.com:4545/portal/portal-docker-images:dev-nginx
   hostname: "nas-local.netop.com"
-  command: bash -c "export TERM=xterm && service nginx start"
+  entrypoint: bash -c "sh /entrypoint/entrypoint.sh"
   volumes:
     - ./image-sources/nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./workspace/portal-frontend/public/dist:/usr/share/nginx/html/portal
     - ./workspace/nas-frontend/public/dist:/usr/share/nginx/html/nas
     - ./workspace/weblogs:/var/log/nginx/netop
+    - ./tools/nginx.sh:/entrypoint/entrypoint.sh
   ports:
     - 80:80
     - 443:443
@@ -49,7 +52,8 @@ netop-permissions:
     - ./workspace/permissions/config:/netop-worker/config
     - ./workspace/permissions/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
-  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 messagebus:5672 && sh /tools/wait-for-it.sh -t 0 cache:6379 && cd /netop-worker/files && echo "START INSTALL PERMISSIONS MODULES" && /usr/local/bin/npm install && echo "DONE INSTALLING PERMISSIONS MODULES" && sh /netop-worker/startMonit.sh'
+    - ./tools/permissions.sh:/entrypoint/entrypoint.sh
+  entrypoint: bash -c "sh /entrypoint/entrypoint.sh"
 #nas worker  container
 netop-nas:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
@@ -66,7 +70,8 @@ netop-nas:
     - ./workspace/nas/config:/netop-worker/config
     - ./workspace/nas/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
-  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 netop-permissions:3003 && cd /netop-worker/files && echo "START INSTALL NAS MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE INSTALLING NAS MODULES" && sh /netop-worker/startMonit.sh'
+    - ./tools/nas.sh:/entrypoint/entrypoint.sh
+  entrypoint: bash -c "sh /entrypoint/entrypoint.sh"
 #portal worker container
 netop-portal:
   image: git.netop.com:4545/portal/portal-docker-images:dev-portal-services
@@ -84,4 +89,5 @@ netop-portal:
     - ./workspace/portal/config:/netop-worker/config
     - ./workspace/portal/logs:/netop-worker/logs
     - ./tools/wait-for-it-master:/tools
-  entrypoint: bash -c 'sh /tools/wait-for-it.sh -t 0 netop-nas:8084 && cd /netop-worker/files && echo "START INSTALL PORTAL MODULES" && /usr/local/bin/npm install && npm run postinstall && echo "DONE PORTAL PERMISSIONS MODULES - NETOP-PORTAL IS READY" && sh /netop-worker/startMonit.sh'
+    - ./tools/portal.sh:/entrypoint/entrypoint.sh
+  entrypoint: bash -c "sh /entrypoint/entrypoint.sh"
