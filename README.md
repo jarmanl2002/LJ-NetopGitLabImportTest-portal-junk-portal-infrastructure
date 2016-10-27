@@ -5,7 +5,8 @@
 #### Valid for commit `40c5ab6407c80d3b162e64c4accf830d2165da3d` in project Portal/portal-infrastructure
 * you must have installed docker support
     * minimum version: 1.10.3  
-`
+
+```
 $ sudo docker version
 Client:
  Version:         1.10.3
@@ -24,7 +25,8 @@ Server:
  Git commit:      8b7fa4a/1.10.3
  Built:           
  OS/Arch:         linux/amd64
-`
+```
+
 * you must stop any services that are listening on the following ports:
     * 80, 443 (usually nginx or apache)
     * 3306 (usualy mysql)
@@ -37,24 +39,26 @@ Server:
 * create a folder which will contain the projects  
 `mkdir netop`
 * clone portal-infrastructure project  
+
 `git clone git@git.netop.com:portal/portal-infrastructure.git`  
 `cd portal-infrastructure`
 
 ## install with docker-compose
 * you must have installed docker-compose support
     * if docker-compose command is not in you path edit file `docker-compose.env` and set the var `COMPOSE_COMMAND` with full path command for docker compose
-    * minimum version:
-`
+    * minimum version: 1.7.0
+
+```
 $ sudo docker-compose version
 docker-compose version 1.7.0, build 0d7bf73
 docker-py version: 1.8.0
 CPython version: 2.7.11
 OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
+```
 
-`
 * run `./install-compose.sh <param1> (<param2>)`
-    * <param1> is full path to folder created earlier (mkdir netop)
-    * <param2> is optional; is the name of the service you want to rebuild:
+    * `<param1>` is full path to folder created earlier (mkdir netop)
+    * `<param2>` is optional; is the name of the service you want to rebuild:
         * netop-cache
         * netop-db
         * netop-mq
@@ -68,8 +72,8 @@ OpenSSL version: OpenSSL 1.0.2g  1 Mar 2016
 <br>
 ## install without docker-compose
 * run `./install.sh <param1> <param2>`
-    * <param1> is full path to folder created earlier (mkdir netop)
-    * <param2> is the ip of the docker engine interface (on linux it is usually `docker0` interface)
+    * `<param1>` is full path to folder created earlier (mkdir netop)
+    * `<param2>` is the ip of the docker engine interface (on linux it is usually `docker0` interface)
 * wait a while
 * when finished , start the containers in this order :
 `docker start netop-portal`
@@ -110,4 +114,5 @@ or (if you used docker command)
 <br>
 <br>
 ## IMPORTANT NOTE:
+
 when you make a change in any of the following projects: netop-portal, netop-nas or netop-permissions you must manually restart the coresponding container so that the changes take effect 
