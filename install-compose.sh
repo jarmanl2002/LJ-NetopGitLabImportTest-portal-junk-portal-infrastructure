@@ -109,9 +109,9 @@ doPortalWorker ()
         sed -i$SED_COMPLETION "s/<redishost>/$COMPOSE_CACHE/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/mysql:\/\/root:dev@<host>\/portal/mysql:\/\/root:dev@$COMPOSE_DB\/portal/" "$SED_FILE";
 
-        sed -i$SED_COMPLETION "s/<_nasip_>/d" "$SED_FILE";
-        sed -i$SED_COMPLETION "s/NAS_HOST/d" "$SED_FILE";
-        sed -i$SED_COMPLETION "s/^fi/d" "$SED_FILE";
+        sed -i$SED_COMPLETION "/<_nasip_>/d" "$SED_FILE";
+        sed -i$SED_COMPLETION "/NAS_HOST/d" "$SED_FILE";
+        sed -i$SED_COMPLETION "/^fi/d" "$SED_FILE";
     fi
 
     if [ ! -d "$INSTALL_DIR"/portal/logs ]; then
