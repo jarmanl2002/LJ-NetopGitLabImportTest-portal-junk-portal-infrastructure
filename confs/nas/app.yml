@@ -1,0 +1,51 @@
+apps:
+  - script: server.js
+    name: 'nas'
+    instances: 1
+    exec_mode: fork
+    cwd: '/netop-worker/files'
+    env:
+      PORT: 8084
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      ADDRESS: '0.0.0.0'
+      NODE_CONFIG_DIR: '/netop-worker/config/env'
+      RABBITMQ_URI: 'netopusr:netoppwd@<rabbitmqhost>:<rabbitmqport>/<rabbitmqvhost>'
+      RABBITMQ_HEARTBEAT: 30
+      NODE_ENV: 'production'
+      EMAIL_SENDER: 'devteam_portal@netop.com'
+      SMTP_USER: 'AKIAJFBOXRCALLKPVICA'
+      SMTP_PASS: 'AsFlrbFIBNeFiwdmjIpdCBTpI/dlLzsxpyHxe27xfLRj'
+      SMTP_SENDER: 'devteam_portal@netop.com'
+      REDIS_HOST: '<redishost>'
+      REDIS_PORT: 6379
+      NODE_DEVICE_ROLEASSIGNMENT: 'a46e37632fa6ca51a13fe39a1457946710814651'
+      NODE_ENROLL_DEVICE: 'd26eae87829adde551bf4b85145794671081'
+      DEVICE_ROLE_ASSIGNMENT_NAME: 'Administrator'
+      ENROLL_DEVICE_NAME: 'Add device'
+      RABBITMQ_MESSAGE_TIMEOUT: 5
+      RABBITMQ_CHECK_TIMER: 500
+      PORTALDELTAADMINAPIKEY: '4fce711a160868ed7b8d2a191fe1fb3d'
+      DB_URI: 'mysql://root:dev@<host>/portal'
+      SUPERADMIN_ACCOUNT: '063947fdeb68fb5843238f24adbe94ae48200dc7'
+      SYSTEM_USER_ID: 'SYSTEM_USER_ID'
+      NETOP_PORTAL_HOSTNAME: 'portal-local.netop.com'
+      NETOP_PORTAL_PROTOCOL: 'https'
+      NETOP_PORTAL_PORT: 443
+      NETOP_NAS_PROTOCOL: 'https'
+      NETOP_NAS_PORT: 443
+      NETOP_NAS_HOSTNAME: 'nas-local.netop.com'
+      NAS_SHARED_SECRET: 'ZOkB4O8OWLuitEM9yQLX9vQDT09ZsWuk7VpdwmI63RYvafiuYxkw6hm88Ndh6zgeDTH8FbZevNEhE4cSpIT3ZA53k813eMqjmZ8mVdEQWq1syaxsGIWwo4vd'
+      NAS_SESSION_SECRET: 'a534k2jb3rkjnclk2j34kj4j2k3nbcf42jk13dkj234bj4h12b3jkd423bcjbksadjfksbhd pqox,pwmx,pqowksmxqpwcnqjibdvue87dasiu987'
+      NETOP_PORTAL_CM: "'ec2-54-229-224-17.eu-west-1.compute.amazonaws.com:6502', 'ec2-54-229-239-82.eu-west-1.compute.amazonaws.com:6502'"
+      NETOP_PORTAL_CS: "'ec2-54-229-230-39.eu-west-1.compute.amazonaws.com:6502','ec2-54-229-213-135.eu-west-1.compute.amazonaws.com:6502'"
+      NETOP_PORTAL_WCS: "'https://wcs-alpha.netop.com'"
+      DB_NAME: 'nas'
+      DB_USER: 'root'
+      DB_PASS: 'dev'
+      DB_HOST: '<db_host>'
+      SESSION_SECURE: 'true'
+      NETOP_WORKER_ID: '<DOCKER_HOST_NAME>'
+    out_file: '/netop-worker/logs/<DOCKER_HOST_NAME>-output-pm2.log'
+    error_file: '/netop-worker/logs/<DOCKER_HOST_NAME>-error-pm2.log'
+    log_date_format : 'YYYY-MM-DD HH:mm Z'
+    merge_logs: true

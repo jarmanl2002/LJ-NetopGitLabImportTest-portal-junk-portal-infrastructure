@@ -56,7 +56,7 @@ doLocalImageForDevelopment () {
     docker login git.netop.com:4545 || exit 1;
 
     echo "Trying to get latest image for developer";
-    docker pull git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2 || exit 1;
+    docker pull git.netop.com:4545/portal/portal-docker-images:developer_F24_N6.9.1_PB3.0.2 || exit 1;
 
     cd "$CURRENT_DIRECTORY";
     if [ -f Dockerfile.localDeveloper ]; then
@@ -95,7 +95,8 @@ doPortalWorker ()
     cd "$CURRENT_DIRECTORY";
     if [ ! -d "$INSTALL_DIR"/portal/config ]; then
         mkdir -p "$INSTALL_DIR"/portal/config/env;
-        cp confs/portal/app.env "$INSTALL_DIR"/portal/config/
+        # cp confs/portal/app.env "$INSTALL_DIR"/portal/config/
+        cp confs/portal/app.yml "$INSTALL_DIR"/portal/config/
         cp confs/portal/{apikeys.json,env-config.json,production.js} "$INSTALL_DIR"/portal/config/env/
 
         #production file for portal
@@ -104,14 +105,15 @@ doPortalWorker ()
         sed -i$SED_COMPLETION "s/'localhost:6379'/'$COMPOSE_CACHE:6379'/" "$SED_FILE"
 
         #app.env for portal
-        SED_FILE="$INSTALL_DIR"/portal/config/app.env
+        #SED_FILE="$INSTALL_DIR"/portal/config/app.env
+        SED_FILE="$INSTALL_DIR"/portal/config/app.yml
         sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$COMPOSE_MQ\/netop-local/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/<redishost>/$COMPOSE_CACHE/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/mysql:\/\/root:dev@<host>\/portal/mysql:\/\/root:dev@$COMPOSE_DB\/portal/" "$SED_FILE";
 
-        sed -i$SED_COMPLETION "/<_nasip_>/d" "$SED_FILE";
-        sed -i$SED_COMPLETION "/NAS_HOST/d" "$SED_FILE";
-        sed -i$SED_COMPLETION "/^fi/d" "$SED_FILE";
+        #sed -i$SED_COMPLETION "/<_nasip_>/d" "$SED_FILE";
+        #sed -i$SED_COMPLETION "/NAS_HOST/d" "$SED_FILE";
+        #sed -i$SED_COMPLETION "/^fi/d" "$SED_FILE";
     fi
 
     if [ ! -d "$INSTALL_DIR"/portal/logs ]; then
@@ -146,10 +148,12 @@ doNasWorker ()
 
     if [ ! -d "$INSTALL_DIR"/nas/config ]; then
         mkdir -p "$INSTALL_DIR"/nas/config;
-        cp confs/nas/app.env "$INSTALL_DIR"/nas/config/;
+        #cp confs/nas/app.env "$INSTALL_DIR"/nas/config/;
+        cp confs/nas/app.yml "$INSTALL_DIR"/nas/config/;
         cp confs/nas/{env-config.js,production.js} "$INSTALL_DIR"/nas/config/env/;
 
-        SED_FILE="$INSTALL_DIR"/nas/config/app.env
+        #SED_FILE="$INSTALL_DIR"/nas/config/app.env
+        SED_FILE="$INSTALL_DIR"/nas/config/app.yml
         sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$COMPOSE_MQ\/netop-local/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/<redis_host>/$COMPOSE_CACHE/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/<db_host>/$COMPOSE_DB/" "$SED_FILE";
@@ -182,10 +186,12 @@ doPermissionsWorker ()
 
     if [ ! -d "$INSTALL_DIR"/permissions/config ]; then
         mkdir -p "$INSTALL_DIR"/permissions/config;
-        cp confs/permission/app.env "$INSTALL_DIR"/permissions/config/
+        #cp confs/permission/app.env "$INSTALL_DIR"/permissions/config/
+        cp confs/permission/app.yml "$INSTALL_DIR"/permissions/config/
 
         #app.env for permissions
-        SED_FILE="$INSTALL_DIR"/permissions/config/app.env
+        #SED_FILE="$INSTALL_DIR"/permissions/config/app.env
+        SED_FILE="$INSTALL_DIR"/permissions/config/app.yml
         sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$COMPOSE_MQ\/netop-local/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/<redis_host>/$COMPOSE_CACHE/" "$SED_FILE";
     fi
