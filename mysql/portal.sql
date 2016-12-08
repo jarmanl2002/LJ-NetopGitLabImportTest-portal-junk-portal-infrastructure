@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `nas` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `nas`;
 -- MySQL dump 10.13  Distrib 5.7.9, for linux-glibc2.5 (x86_64)
 --
--- Host: 172.17.0.1    Database: nas
+-- Host: localhost    Database: nas
 -- ------------------------------------------------------
 -- Server version	5.7.16
 
@@ -231,12 +231,12 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-20 10:40:11
+-- Dump completed on 2016-12-08 17:34:49
 CREATE DATABASE  IF NOT EXISTS `portal` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `portal`;
 -- MySQL dump 10.13  Distrib 5.7.9, for linux-glibc2.5 (x86_64)
 --
--- Host: 172.17.0.1    Database: portal
+-- Host: localhost    Database: portal
 -- ------------------------------------------------------
 -- Server version	5.7.16
 
@@ -558,6 +558,35 @@ LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
 INSERT INTO `group` VALUES ('30041edb80e2651fb50e3b051453893643741700','063947fdeb68fb5843238f24adbe94ae48200dc7','everything',NULL,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00',NULL,2,'',1,1),('b9d486855f6000006412b6481453893643741713','063947fdeb68fb5843238f24adbe94ae48200dc7','everyone',NULL,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00',NULL,1,'',1,1);
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mfaOneTimeCodes`
+--
+
+DROP TABLE IF EXISTS `mfaOneTimeCodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mfaOneTimeCodes` (
+  `id` varchar(36) NOT NULL,
+  `userId` varchar(40) NOT NULL,
+  `codeHash` text NOT NULL,
+  `algorithm` text NOT NULL,
+  `created` datetime NOT NULL,
+  `used` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_mfaOneTimeCodes_userId` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mfaOneTimeCodes`
+--
+
+LOCK TABLES `mfaOneTimeCodes` WRITE;
+/*!40000 ALTER TABLE `mfaOneTimeCodes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mfaOneTimeCodes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -947,4 +976,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-20 10:40:11
+-- Dump completed on 2016-12-08 17:34:49
