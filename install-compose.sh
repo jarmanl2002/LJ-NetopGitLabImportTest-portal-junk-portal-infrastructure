@@ -86,7 +86,7 @@ doLocalImageForDevelopment () {
     fi
 
     docker build -t netop_local_develop -f Dockerfile.localDeveloper .
-    docker build -t netop_nas_local_develop -f Dockerfile.localDeveloper .
+    docker build -t netop_nas_local_develop -f Dockerfile.nas.localDeveloper .
     cd "$CURRENT_DIRECTORY";
 }
 
