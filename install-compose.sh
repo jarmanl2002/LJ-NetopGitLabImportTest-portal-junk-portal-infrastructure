@@ -160,7 +160,7 @@ doNasWorker ()
     fi
 
     if [ ! -d "$INSTALL_DIR"/nas/config ]; then
-        mkdir -p "$INSTALL_DIR"/nas/config;
+        mkdir -p "$INSTALL_DIR"/nas/config/env;
         #cp confs/nas/app.env "$INSTALL_DIR"/nas/config/;
         cp confs/nas/app.yml "$INSTALL_DIR"/nas/config/;
         cp confs/nas/{env-config.js,production.js} "$INSTALL_DIR"/nas/config/env/;
@@ -198,7 +198,7 @@ doPermissionsWorker ()
     fi
 
     if [ ! -d "$INSTALL_DIR"/permissions/config ]; then
-        mkdir -p "$INSTALL_DIR"/permissions/config;
+        mkdir -p "$INSTALL_DIR"/permissions/config/env;
         #cp confs/permission/app.env "$INSTALL_DIR"/permissions/config/
         cp confs/permission/app.yml "$INSTALL_DIR"/permissions/config/
 
