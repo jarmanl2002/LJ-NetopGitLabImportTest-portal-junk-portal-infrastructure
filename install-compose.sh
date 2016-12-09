@@ -70,11 +70,14 @@ doLocalImageForDevelopment () {
       cp Dockerfile.root.localDeveloper Dockerfile.localDeveloper;
       cp Dockerfile.root.nasdeveloper Dockerfile.nas.localDeveloper;
     else
+      echo "Local developer image"
       cp Dockerfile.netopDeveloper Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
+
+      echo "Old nas Local developer image"
       cp Dockerfile.nasdeveloper Dockerfile.nas.localDeveloper;
       sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.nas.localDeveloper;
       sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.nas.localDeveloper;
