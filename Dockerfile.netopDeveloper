@@ -7,6 +7,7 @@ RUN set -x \
   && cp /root/.npmrc ~<user_name>/ \
   && chown <user_name>. ~<user_name>/.npmrc \
   && cp -R /root/.ssh ~<user_name>/ \
-  && chown -R <user_name>. ~<user_name>/.ssh
+  && chown -R <user_name>. ~<user_name>/.ssh \
+  && ls -l /usr/local/bin/su-exec
 
 ENTRYPOINT ["/usr/local/bin/su-exec", "<user_name>", "/netop-worker/startMonit.sh"]
