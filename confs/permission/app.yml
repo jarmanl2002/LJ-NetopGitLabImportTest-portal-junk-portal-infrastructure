@@ -1,0 +1,37 @@
+apps:
+  - script: server.js
+    name: 'permissions'
+    instances: 1
+    exec_mode: fork
+    cwd: '/netop-worker/files'
+    env:
+      PORT: 3003
+      NODE_ENV: 'production'
+      MQ_PORTAL_GROUPS_REQUEST_QUEUE: 'production-portal-group-requests'
+      MQ_PORTAL_ROLE_REQUEST_QUEUE: 'production-portal-role-requests'
+      MQ_PORTAL_ROLE_ASSIGNMENT_REQUEST_QUEUE: 'production-portal-role-assignment-requests'
+      MQ_PORTAL_ACCOUNT_REQUEST_QUEUE: 'production-portal-account-requests'
+      REDIS_HOST: '<redis_host>'
+      REDIS_PORT: '6379'
+      MQ_PORTAL_GROUPS_TOPIC: 'production.portal.group'
+      MQ_PORTAL_ROLES_TOPIC: 'production.portal.role'
+      MQ_PORTAL_ROLEASSIGNMENTS_TOPIC: 'production.portal.roleAssignment'
+      MQ_PORTAL_ACCOUNTS_TOPIC: 'production.portal.account'
+      MQ_PERMISSIONS_LOCK_KEY: 'production-permissions-lock'
+      MQ_PERMISSIONS_NOTIF_KEY: 'production-permissionsNotifications'
+      MQ_PERMISSIONS_NOTIF_FIELD: 'general'
+      MQ_PERMISSIONS_NOTIFICATIONS_QUEUE: 'production-permissions-worker'
+      RABBITMQ_EXCHANGE_NAME: 'netop-local-netopExchange'
+      RABBITMQ_EXCHANGE_TYPE: 'topic'
+      RABBITMQ_HEARTBEAT: '30'
+      RABBITMQ_URI: 'netopusr:netoppwd@<rabbitmqhost>:<rabbitmqport>/<rabbitmqvhost>'
+      RABBITMQ_MESSAGE_TIMEOUT: 5;
+      RABBITMQ_CHECK_TIMER: 500;
+      PORTAL_DEFAULT_ACCOUNT: 'PORTAL-DEFAULT-ACCOUNT'
+      MQ_PERMISSIONS_INTER_WORKERS_QUEUE: 'production-permissions-inter-workers'
+      MQ_PERMISSIONS_NOTIFICATIONS_TOPIC: 'production.permissions.notifications'
+      NETOP_WORKER_ID: '<DOCKER_HOST_NAME>'
+    out_file: '/netop-worker/logs/<DOCKER_HOST_NAME>-output-pm2.log'
+    error_file: '/netop-worker/logs/<DOCKER_HOST_NAME>-error-pm2.log'
+    log_date_format : 'YYYY-MM-DD HH:mm Z'
+    merge_logs: true

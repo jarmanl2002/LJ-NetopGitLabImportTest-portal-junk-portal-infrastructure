@@ -58,6 +58,9 @@ doLocalImageForDevelopment () {
     echo "Trying to get latest image for developer";
     docker pull git.netop.com:4545/portal/portal-docker-images:developer_F24_N6.9.1_PB3.0.2 || exit 1;
 
+    echo "Trying to get latest image for nas developer";
+    docker pull git.netop.com:4545/portal/portal-docker-images:developer_F24_N0.12.7_PB3.0.2 || exit 1;
+
     cd "$CURRENT_DIRECTORY";
     if [ -f Dockerfile.localDeveloper ]; then
       rm -rf Dockerfile.localDeveloper;
@@ -65,15 +68,22 @@ doLocalImageForDevelopment () {
 
     if [ "$NETOP_USER_ID" == "0" ]; then
       cp Dockerfile.root.localDeveloper Dockerfile.localDeveloper;
+      cp Dockerfile.root.nasdeveloper Dockerfile.nas.localDeveloper;
     else
       cp Dockerfile.netopDeveloper Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.localDeveloper;
       sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.localDeveloper;
+      cp Dockerfile.nasdeveloper Dockerfile.nas.localDeveloper;
+      sed -i$SED_COMPLETION "s/<user_name>/$NETOP_USER_NAME/g" Dockerfile.nas.localDeveloper;
+      sed -i$SED_COMPLETION "s/<group_id>/$NETOP_USER_GROUP_ID/g" Dockerfile.nas.localDeveloper;
+      sed -i$SED_COMPLETION "s/<group_name>/$NETOP_USER_GROUP_NAME/g" Dockerfile.nas.localDeveloper;
+      sed -i$SED_COMPLETION "s/<user_id>/$NETOP_USER_ID/g" Dockerfile.nas.localDeveloper;
     fi
 
     docker build -t netop_local_develop -f Dockerfile.localDeveloper .
+    docker build -t netop_nas_local_develop -f Dockerfile.localDeveloper .
     cd "$CURRENT_DIRECTORY";
 }
 

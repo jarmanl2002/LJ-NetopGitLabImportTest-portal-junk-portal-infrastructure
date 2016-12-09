@@ -64,7 +64,7 @@ services:
       - netop-mq
       - netop-nas
   netop-nas:
-    image: netop_local_develop
+    image: netop_nas_local_develop
     networks:
       - default
     ports:
