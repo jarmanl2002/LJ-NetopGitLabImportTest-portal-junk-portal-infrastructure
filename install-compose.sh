@@ -143,7 +143,7 @@ doPortalWorker ()
     "$COMPOSE_COMMAND" up -d "$COMPOSE_PORTAL" || exit 1;
 
     echo "install portal dependencies"
-    "$COMPOSE_COMMAND" exec "$COMPOSE_PORTAL" /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install && /usr/local/bin/npm run postinstall";
+    "$COMPOSE_COMMAND" exec "$COMPOSE_PORTAL" /usr/local/bin/su-exec $NETOP_USER_NAME /bin/sh -c "cd /netop-worker/files && /usr/local/bin/npm install";
     echo "finish install portal dependencies";
 
     # restart needed only at first install when there are no dependencies installed
@@ -168,7 +168,7 @@ doNasWorker ()
         #SED_FILE="$INSTALL_DIR"/nas/config/app.env
         SED_FILE="$INSTALL_DIR"/nas/config/app.yml
         sed -i$SED_COMPLETION "s/<rabbitmqhost>:<rabbitmqport>\/<rabbitmqvhost>/$COMPOSE_MQ\/netop-local/" "$SED_FILE";
-        sed -i$SED_COMPLETION "s/<redis_host>/$COMPOSE_CACHE/" "$SED_FILE";
+        sed -i$SED_COMPLETION "s/<redishost>/$COMPOSE_CACHE/" "$SED_FILE";
         sed -i$SED_COMPLETION "s/<db_host>/$COMPOSE_DB/" "$SED_FILE";
     fi
 
@@ -266,7 +266,7 @@ doNetopWeb ()
         git clone git@git.netop.com:portal/netop-portal-frontend.git "$INSTALL_DIR"/portal-frontend;
         cd "$INSTALL_DIR"/portal-frontend;
         git checkout develop;
-        npm install && npm run build;
+        npm install && NODE_ENV='production' API_LOCATION='https://portalapi-local.netop.com' npm run build;
     fi
 
     if [ ! -d "$INSTALL_DIR"/weblogs ]; then
